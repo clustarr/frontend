@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import { Delete, Cloud, CloudOff, Power, PowerOff, PowerSettingsNew } from '@material-ui/icons';
+import { Delete, Cloud, CloudOff, PowerSettingsNew } from '@material-ui/icons';
 import IconButton from "@material-ui/core/IconButton";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
@@ -12,10 +12,10 @@ class HostComponent extends Component {
             <ListItem key={`listitem-${this.props.hostname}`}>
                 <ListItemText id={`label-${this.props.hostname}`} primary={this.props.hostname} />
                 <ListItemSecondaryAction>
-                    <Tooltip title={"Host is powered " + (this.props.isPoweredOn ? "on": "off")}>
+                    <Tooltip title={"Host is powered " + (this.props.isRunning ? "on": "off")}>
                         <span>
                             <IconButton color="inherit" disabled={true}>
-                                <PowerSettingsNew style={this.props.isPoweredOn? {color: "initial"}: {}}/>
+                                <PowerSettingsNew style={this.props.isRunning? {color: "initial"}: {}}/>
                             </IconButton>
                         </span>
                     </Tooltip>
