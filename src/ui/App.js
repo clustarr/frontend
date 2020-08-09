@@ -18,7 +18,6 @@ class App extends Component {
 
     async componentDidMount() {
         let inventoryList = await AnsibleApi.listInventory();
-        console.log(inventoryList);
 
         let allHosts = Object.keys(inventoryList['_meta']['hostvars'])
 
@@ -41,8 +40,9 @@ class App extends Component {
         for (let hostname of runningHosts) {
             let host = new Host();
             host.hostname = hostname
-            host.isRunning = true
-            host.isInCluster = masterHosts.includes(hostname) || workerHosts.includes(hostname)
+            host.running = true
+            host.master = masterHosts.includes(hostname)
+            host.worker = workerHosts.includes(hostname)
             hosts.push(host);
         }
         for (let hostname of allHosts) {
@@ -51,8 +51,9 @@ class App extends Component {
             }
             let host = new Host();
             host.hostname = hostname
-            host.isRunning = false
-            host.isInCluster = masterHosts.includes(hostname) || workerHosts.includes(hostname)
+            host.running = false
+            host.master = masterHosts.includes(hostname)
+            host.worker = workerHosts.includes(hostname)
             hosts.push(host);
         }
 
@@ -72,9 +73,7 @@ class App extends Component {
                                     this.state.hosts.map((host) =>
                                         <HostComponent
                                             key={host.hostname}
-                                            hostname={host.hostname}
-                                            isRunning={host.isRunning}
-                                            isInCluster={host.isInCluster} />
+                                            host={host} />
                                     )
                                 }
                             </List>

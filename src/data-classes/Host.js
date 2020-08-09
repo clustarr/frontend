@@ -1,5 +1,6 @@
 export default class Host {
     hostname;
-    isRunning;
-    isInCluster;
+    running;
+    master;
+    worker;
 }
