@@ -21,17 +21,28 @@ class App extends Component {
         console.log(inventoryList);
 
         let allHosts = Object.keys(inventoryList['_meta']['hostvars'])
-        if (allHosts.length === 0) {
-            return;
+
+        let runningHosts = [];
+        if (inventoryList['running']) {
+            runningHosts = inventoryList['running']['hosts']
         }
-        let runningHosts = inventoryList['running']['hosts'];
+
+        let masterHosts = [];
+        if (inventoryList['masters']) {
+            masterHosts = inventoryList['masters']['hosts']
+        }
+
+        let workerHosts = [];
+        if (inventoryList['workers']) {
+            workerHosts = inventoryList['workers']['hosts']
+        }
 
         let hosts = [];
         for (let hostname of runningHosts) {
             let host = new Host();
             host.hostname = hostname
             host.isRunning = true
-            host.isInCluster = false
+            host.isInCluster = masterHosts.includes(hostname) || workerHosts.includes(hostname)
             hosts.push(host);
         }
         for (let hostname of allHosts) {
@@ -41,7 +52,7 @@ class App extends Component {
             let host = new Host();
             host.hostname = hostname
             host.isRunning = false
-            host.isInCluster = false
+            host.isInCluster = masterHosts.includes(hostname) || workerHosts.includes(hostname)
             hosts.push(host);
         }
 

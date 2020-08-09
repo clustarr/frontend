@@ -12,7 +12,7 @@ class HostComponent extends Component {
             <ListItem key={`listitem-${this.props.hostname}`}>
                 <ListItemText id={`label-${this.props.hostname}`} primary={this.props.hostname} />
                 <ListItemSecondaryAction>
-                    <Tooltip title={"Host is powered " + (this.props.isRunning ? "on": "off")}>
+                    <Tooltip title={"host is powered " + (this.props.isRunning ? "on": "off")}>
                         <span>
                             <IconButton color="inherit" disabled={true}>
                                 <PowerSettingsNew style={this.props.isRunning? {color: "initial"}: {}}/>
@@ -20,10 +20,12 @@ class HostComponent extends Component {
                         </span>
                     </Tooltip>
 
-                    <Tooltip title="add host to cluster">
-                        <IconButton aria-label="add host to cluster" color="inherit" disabled={false}>
-                            {this.props.isInCluster ? <Cloud/> : <CloudOff/>}
-                        </IconButton>
+                    <Tooltip title={this.props.isInCluster ? "host is in cluster" : "add host to cluster"}>
+                        <span>
+                            <IconButton aria-label={this.props.isInCluster ? "" : "add host to cluster"} color="inherit" disabled={this.props.isInCluster}>
+                                {this.props.isInCluster ? <Cloud/> : <CloudOff/>}
+                            </IconButton>
+                        </span>
                     </Tooltip>
 
                     <Tooltip title="delete host">
