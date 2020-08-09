@@ -7,8 +7,18 @@ import ListItem from "@material-ui/core/ListItem";
 import Tooltip from "@material-ui/core/Tooltip";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import { faServer, faRobot } from '@fortawesome/free-solid-svg-icons'
+import AnsibleApi from "../../api/AnsibleApi";
 
 class HostComponent extends Component {
+    deleteHost = async () => {
+        await AnsibleApi.runPlaybook({
+            "playbook": "remove-node.yml",
+            "extra_vars": {
+                "hostname": this.props.host.hostname
+            }
+        });
+    }
+
     render() {
         return (
             <ListItem key={`listitem-${this.props.host.hostname}`}>
@@ -46,7 +56,7 @@ class HostComponent extends Component {
                     </Tooltip>
 
                     <Tooltip title="delete host">
-                        <IconButton aria-label="delete host" color="inherit" disabled={false}>
+                        <IconButton aria-label="delete host" color="inherit" onClick={this.deleteHost}>
                             <Delete/>
                         </IconButton>
                     </Tooltip>
