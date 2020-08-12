@@ -4,12 +4,29 @@ import List from "@material-ui/core/List";
 import HostComponent from "./HostComponent";
 import AnsibleApi from "../../api/AnsibleApi";
 import Host from "../../data-classes/Host";
+import Fab from "@material-ui/core/Fab";
+import {Add} from "@material-ui/icons";
+import {withStyles} from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
+import HostTypeDialog from "./HostTypeDialog";
+import ChooseHostnameDialog from "./ChooseHostnameDialog";
+
+
+const styles = theme => ({
+    fab: {
+        position: 'absolute',
+        bottom: theme.spacing(2),
+        right: theme.spacing(2),
+    },
+});
+
 
 class OverviewComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            hosts: []
+            hosts: [],
+            dialogOpen: false
         };
     }
 
@@ -59,21 +76,57 @@ class OverviewComponent extends Component {
         })
     }
 
+    openDialog = () => {
+        this.setState({
+            dialogOpen: true
+        })
+    }
+
+    handleDialogClose = () => {
+        this.setState({
+            dialogOpen: false
+        })
+    }
+
+    handleDialogOk = async (hostname) => {
+        this.handleDialogClose();
+
+        await AnsibleApi.runPlaybook({
+            "playbook": "add-node.yml",
+            "extra_vars": {
+                "hostname": hostname
+            }
+        });
+    }
+
     render() {
+        const { classes } = this.props;
+
         return (
-            <Paper>
-                <List>
-                    {
-                        this.state.hosts.map((host) =>
-                            <HostComponent
-                                key={host.hostname}
-                                host={host} />
-                        )
-                    }
-                </List>
-            </Paper>
+            <React.Fragment>
+                <ChooseHostnameDialog
+                    isOpen={this.state.dialogOpen}
+                    handleClose={this.handleDialogClose}
+                    handleOk={this.handleDialogOk} />
+                <Paper>
+                    <List>
+                        {
+                            this.state.hosts.map((host) =>
+                                <HostComponent
+                                    key={host.hostname}
+                                    host={host} />
+                            )
+                        }
+                    </List>
+                </Paper>
+                <Tooltip title="Add Host" aria-label="add host">
+                    <Fab color="primary" className={classes.fab} onClick={this.openDialog}>
+                        <Add />
+                    </Fab>
+                </Tooltip>
+            </React.Fragment>
         )
     }
 }
 
-export default OverviewComponent;
+export default withStyles(styles, { withTheme: true })(OverviewComponent);
