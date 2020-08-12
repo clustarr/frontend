@@ -14,6 +14,11 @@ class TasksComponent extends Component {
     }
 
     async componentDidMount() {
+        await this.getTasks();
+        this.timer = setInterval(this.getTasks, 2000)
+    }
+
+    getTasks = async () => {
         let taskList = await TaskApi.listTasks();
 
         let taskIds = Object.keys(taskList);
