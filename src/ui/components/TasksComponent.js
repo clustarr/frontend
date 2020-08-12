@@ -15,7 +15,11 @@ class TasksComponent extends Component {
 
     async componentDidMount() {
         await this.getTasks();
-        this.timer = setInterval(this.getTasks, 2000)
+        this.interval = setInterval(this.getTasks, 2000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     getTasks = async () => {

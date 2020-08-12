@@ -34,7 +34,11 @@ class HostsComponent extends Component {
 
     async componentDidMount() {
         await this.getHosts();
-        this.timer = setInterval(this.getHosts, 4000)
+        this.interval = setInterval(this.getHosts, 4000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
     }
 
     getHosts = async () => {
