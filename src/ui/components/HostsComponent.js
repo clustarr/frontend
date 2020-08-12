@@ -33,6 +33,11 @@ class HostsComponent extends Component {
     }
 
     async componentDidMount() {
+        await this.getHosts();
+        this.timer = setInterval(this.getHosts, 4000)
+    }
+
+    getHosts = async () => {
         let inventoryList = await AnsibleApi.listInventory();
 
         let allHosts = Object.keys(inventoryList['_meta']['hostvars'])
