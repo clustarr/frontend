@@ -10,8 +10,8 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import {Home, Memory} from '@material-ui/icons';
 import CssBaseline from "@material-ui/core/CssBaseline";
-import OverviewComponent from "./components/OverviewComponent";
-import { withStyles } from "@material-ui/core/styles";
+import HostsComponent from "./components/HostsComponent";
+import {withStyles} from "@material-ui/core/styles";
 import TasksComponent from "./components/TasksComponent";
 
 
@@ -45,13 +45,13 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            displayComponent: <OverviewComponent/>
+            displayComponent: <HostsComponent/>
         };
     }
 
     displayOverview = () => {
         this.setState({
-            displayComponent: <OverviewComponent/>
+            displayComponent: <HostsComponent/>
         })
     }
 

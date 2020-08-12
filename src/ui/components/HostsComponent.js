@@ -5,23 +5,25 @@ import HostComponent from "./HostComponent";
 import AnsibleApi from "../../api/AnsibleApi";
 import Host from "../../data-classes/Host";
 import Fab from "@material-ui/core/Fab";
-import {Add} from "@material-ui/icons";
+import {Add, Settings} from "@material-ui/icons";
 import {withStyles} from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
-import HostTypeDialog from "./HostTypeDialog";
 import ChooseHostnameDialog from "./ChooseHostnameDialog";
 
 
 const styles = theme => ({
-    fab: {
+    fabDiv: {
         position: 'absolute',
         bottom: theme.spacing(2),
-        right: theme.spacing(2),
+        right: theme.spacing(2)
     },
+    fab: {
+        margin: theme.spacing(1)
+    }
 });
 
 
-class OverviewComponent extends Component {
+class HostsComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -99,6 +101,12 @@ class OverviewComponent extends Component {
         });
     }
 
+    setupProxmox = async () => {
+        await AnsibleApi.runPlaybook({
+            "playbook": "setup-proxmox.yml"
+        });
+    }
+
     render() {
         const { classes } = this.props;
 
@@ -119,14 +127,21 @@ class OverviewComponent extends Component {
                         }
                     </List>
                 </Paper>
-                <Tooltip title="Add Host" aria-label="add host">
-                    <Fab color="primary" className={classes.fab} onClick={this.openDialog}>
-                        <Add />
-                    </Fab>
-                </Tooltip>
+                <div className={classes.fabDiv}>
+                    <Tooltip title="Setup Proxmox" aria-label="setup proxmox">
+                        <Fab color="primary" className={classes.fab} onClick={this.setupProxmox}>
+                            <Settings />
+                        </Fab>
+                    </Tooltip>
+                    <Tooltip title="Add Host" aria-label="add host">
+                        <Fab color="primary" className={classes.fab} onClick={this.openDialog}>
+                            <Add />
+                        </Fab>
+                    </Tooltip>
+                </div>
             </React.Fragment>
         )
     }
 }
 
-export default withStyles(styles, { withTheme: true })(OverviewComponent);
+export default withStyles(styles, { withTheme: true })(HostsComponent);

@@ -1,12 +1,12 @@
 import React, {Component} from "react";
-import { Delete, Cloud, PowerSettingsNew } from '@material-ui/icons';
+import {Cloud, Delete, PowerSettingsNew} from '@material-ui/icons';
 import IconButton from "@material-ui/core/IconButton";
 import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItem from "@material-ui/core/ListItem";
 import Tooltip from "@material-ui/core/Tooltip";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import { faServer, faRobot } from '@fortawesome/free-solid-svg-icons'
+import {faRobot, faServer} from '@fortawesome/free-solid-svg-icons'
 import AnsibleApi from "../../api/AnsibleApi";
 import HostTypeDialog from "./HostTypeDialog";
 
