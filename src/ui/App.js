@@ -1,88 +1,90 @@
 import React, {Component} from 'react';
 import './App.css';
-import HostComponent from "./components/HostComponent";
-import Paper from '@material-ui/core/Paper';
-import Container from "@material-ui/core/Container";
 import List from "@material-ui/core/List";
-import Grid from "@material-ui/core/Grid";
-import AnsibleApi from "../api/AnsibleApi";
-import Host from "../data-classes/Host";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Drawer from "@material-ui/core/Drawer";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import {Home, Memory} from '@material-ui/icons';
+import CssBaseline from "@material-ui/core/CssBaseline";
+import OverviewComponent from "./components/OverviewComponent";
+import {withStyles} from "@material-ui/core/styles";
+
+
+const drawerWidth = 240;
+
+const styles = theme => ({
+    root: {
+        display: 'flex',
+    },
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+    },
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+    },
+    drawerPaper: {
+        width: drawerWidth,
+    },
+    drawerContainer: {
+        overflow: 'auto',
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+    },
+});
+
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            hosts: []
-        };
-    }
-
-    async componentDidMount() {
-        let inventoryList = await AnsibleApi.listInventory();
-
-        let allHosts = Object.keys(inventoryList['_meta']['hostvars'])
-
-        let runningHosts = [];
-        if (inventoryList['running']) {
-            runningHosts = inventoryList['running']['hosts']
-        }
-
-        let masterHosts = [];
-        if (inventoryList['masters']) {
-            masterHosts = inventoryList['masters']['hosts']
-        }
-
-        let workerHosts = [];
-        if (inventoryList['workers']) {
-            workerHosts = inventoryList['workers']['hosts']
-        }
-
-        let hosts = [];
-        for (let hostname of runningHosts) {
-            let host = new Host();
-            host.hostname = hostname
-            host.running = true
-            host.master = masterHosts.includes(hostname)
-            host.worker = workerHosts.includes(hostname)
-            hosts.push(host);
-        }
-        for (let hostname of allHosts) {
-            if (runningHosts.includes(hostname)) {
-                continue;
-            }
-            let host = new Host();
-            host.hostname = hostname
-            host.running = false
-            host.master = masterHosts.includes(hostname)
-            host.worker = workerHosts.includes(hostname)
-            hosts.push(host);
-        }
-
-        this.setState({
-            hosts: hosts,
-        })
-    }
-
     render() {
+        const { classes } = this.props;
         return (
-            <Container style={{ paddingTop: "1em" }}>
-                <Grid container justify="center" spacing={2}>
-                    <Grid item xs={8}>
-                        <Paper>
-                            <List>
-                                {
-                                    this.state.hosts.map((host) =>
-                                        <HostComponent
-                                            key={host.hostname}
-                                            host={host} />
-                                    )
-                                }
-                            </List>
-                        </Paper>
-                    </Grid>
-                </Grid>
-            </Container>
+            <div className={classes.root}>
+                <CssBaseline />
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                        <Typography variant="h6" noWrap>
+                            clustarr-frontend
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                <Drawer
+                    className={classes.drawer}
+                    variant="permanent"
+                    classes={{
+                        paper: classes.drawerPaper,
+                    }}
+                >
+                    <Toolbar />
+                    <div className={classes.drawerContainer}>
+                        <List>
+                            <ListItem button key="overview">
+                                <ListItemIcon>
+                                    <Home/>
+                                </ListItemIcon>
+                                <ListItemText primary="Overview" />
+                            </ListItem>
+                            <ListItem button key="tasks">
+                                <ListItemIcon>
+                                    <Memory/>
+                                </ListItemIcon>
+                                <ListItemText primary="Tasks" />
+                            </ListItem>
+                        </List>
+                    </div>
+                </Drawer>
+                <main className={classes.content}>
+                    <Toolbar />
+                    <OverviewComponent/>
+                </main>
+            </div>
         );
     }
 }
 
-export default App;
+export default withStyles(styles, { withTheme: true })(App);
