@@ -13,19 +13,28 @@ class TaskComponent extends Component {
     }
 
     openDialog = async () => {
+        await this.getOutput();
+        this.interval = setInterval(this.getOutput, 1000)
+    }
+
+    getOutput = async () => {
         let response = await AnsibleApi.getPlaybookOutput(this.props.task.id);
         let taskOutput = response.output
-        console.log(taskOutput);
         this.setState({
             dialogOpen: true,
             taskOutput: taskOutput
         })
     }
 
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
     handleDialogClose = () => {
         this.setState({
             dialogOpen: false
         })
+        clearInterval(this.interval);
     }
 
     render() {
