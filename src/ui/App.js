@@ -11,7 +11,8 @@ import ListItemText from "@material-ui/core/ListItemText";
 import {Home, Memory} from '@material-ui/icons';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import OverviewComponent from "./components/OverviewComponent";
-import {withStyles} from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
+import TasksComponent from "./components/TasksComponent";
 
 
 const drawerWidth = 240;
@@ -41,6 +42,25 @@ const styles = theme => ({
 
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            displayComponent: <OverviewComponent/>
+        };
+    }
+
+    displayOverview = () => {
+        this.setState({
+            displayComponent: <OverviewComponent/>
+        })
+    }
+
+    displayTasks = () => {
+        this.setState({
+            displayComponent: <TasksComponent/>
+        })
+    }
+
     render() {
         const { classes } = this.props;
         return (
@@ -63,13 +83,13 @@ class App extends Component {
                     <Toolbar />
                     <div className={classes.drawerContainer}>
                         <List>
-                            <ListItem button key="overview">
+                            <ListItem button key="overview" onClick={this.displayOverview}>
                                 <ListItemIcon>
                                     <Home/>
                                 </ListItemIcon>
                                 <ListItemText primary="Overview" />
                             </ListItem>
-                            <ListItem button key="tasks">
+                            <ListItem button key="tasks" onClick={this.displayTasks}>
                                 <ListItemIcon>
                                     <Memory/>
                                 </ListItemIcon>
@@ -80,7 +100,7 @@ class App extends Component {
                 </Drawer>
                 <main className={classes.content}>
                     <Toolbar />
-                    <OverviewComponent/>
+                    {this.state.displayComponent}
                 </main>
             </div>
         );
