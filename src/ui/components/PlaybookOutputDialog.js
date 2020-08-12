@@ -23,7 +23,7 @@ class PlaybookOutputDialog extends Component {
                         id="scroll-dialog-description"
                         tabIndex={-1}
                     >
-                        <Typography variant="body1" style={{whiteSpace: 'pre-line'}}>
+                        <Typography component="span" variant="body1" style={{whiteSpace: 'pre-line'}}>
                             {this.props.taskOutput}
                         </Typography>
                     </DialogContentText>
