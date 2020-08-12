@@ -17,6 +17,15 @@ export default class AnsibleApi {
             });
     }
 
+    static getPlaybookOutput(taskId) {
+        return fetch(`${this.baseUrl}/playbook/${taskId}`)
+            .then(response => {
+                return response.json();
+            }).catch(error => {
+                return error;
+            });
+    }
+
     static listInventory() {
         return fetch(`${this.baseUrl}/inventory?inventory=/etc/ansible/proxmox.py`)
             .then(response => {
