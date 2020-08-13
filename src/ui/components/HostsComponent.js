@@ -9,6 +9,7 @@ import {Add, Settings} from "@material-ui/icons";
 import {withStyles} from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import ChooseHostnameDialog from "./ChooseHostnameDialog";
+import HostGroups from "../../data-classes/HostGroups";
 
 
 const styles = theme => ({
@@ -51,34 +52,20 @@ class HostsComponent extends Component {
             runningHosts = inventoryList['running']['hosts']
         }
 
-        let masterHosts = [];
-        if (inventoryList['masters']) {
-            masterHosts = inventoryList['masters']['hosts']
-        }
-
-        let workerHosts = [];
-        if (inventoryList['workers']) {
-            workerHosts = inventoryList['workers']['hosts']
-        }
-
         let hosts = [];
-        for (let hostname of runningHosts) {
-            let host = new Host();
-            host.hostname = hostname
-            host.running = true
-            host.master = masterHosts.includes(hostname)
-            host.worker = workerHosts.includes(hostname)
-            hosts.push(host);
-        }
         for (let hostname of allHosts) {
-            if (runningHosts.includes(hostname)) {
-                continue;
-            }
             let host = new Host();
-            host.hostname = hostname
-            host.running = false
-            host.master = masterHosts.includes(hostname)
-            host.worker = workerHosts.includes(hostname)
+            host.hostname = hostname;
+            host.running = runningHosts.includes(hostname);
+            for (let group of [HostGroups.MASTERS, HostGroups.WORKERS]) {
+                let groupHosts = []
+                if (inventoryList[group]) {
+                    groupHosts = inventoryList[group]['hosts']
+                }
+                if (groupHosts.includes(hostname)) {
+                    host.group = group;
+                }
+            }
             hosts.push(host);
         }
 

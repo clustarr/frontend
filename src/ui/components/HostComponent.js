@@ -9,6 +9,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRobot, faServer} from '@fortawesome/free-solid-svg-icons'
 import AnsibleApi from "../../api/AnsibleApi";
 import HostTypeDialog from "./HostTypeDialog";
+import HostGroups from "../../data-classes/HostGroups";
 
 class HostComponent extends Component {
     constructor(props) {
@@ -73,20 +74,33 @@ class HostComponent extends Component {
 
                         <Tooltip
                             title={
-                                this.props.host.master ? "host is a master" :
-                                    this.props.host.worker ? "host is a worker" :
-                                        "add host to cluster" }>
+                                this.props.host.group === HostGroups.MASTERS ?
+                                    "host is a master" :
+                                    this.props.host.group === HostGroups.WORKERS ?
+                                        "host is a worker" :
+                                        "add host to cluster"
+                            }>
                             <span>
                                 <IconButton
                                     aria-label={
-                                        (this.props.host.master || this.props.host.worker) ? "" :
-                                        "add host to cluster"
+                                        (
+                                            this.props.host.group === HostGroups.MASTERS ||
+                                            this.props.host.group === HostGroups.WORKERS
+                                        ) ?
+                                            "" :
+                                            "add host to cluster"
                                     }
                                     color="inherit"
-                                    disabled={this.props.host.master || this.props.host.worker}
+                                    disabled={
+                                        this.props.host.group === HostGroups.MASTERS ||
+                                        this.props.host.group === HostGroups.WORKERS
+                                    }
                                     onClick={this.openDialog} >
-                                    {(this.props.host.master || this.props.host.worker) ?
-                                        this.props.host.master ?
+                                    {(
+                                        this.props.host.group === HostGroups.MASTERS ||
+                                        this.props.host.group === HostGroups.WORKERS
+                                    ) ?
+                                        this.props.host.group === HostGroups.MASTERS ?
                                             <FontAwesomeIcon icon={faServer} style={{width: "24px"}} /> :
                                             <FontAwesomeIcon icon={faRobot} style={{width: "24px"}} />
                                         : <Cloud/>
