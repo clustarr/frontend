@@ -65,7 +65,10 @@ class HostComponent extends Component {
                     key={`listitem-${this.props.host.hostname}`}
                     disabled={!this.props.host.group}
                 >
-                    <ListItemText id={`label-${this.props.host.hostname}`} primary={this.props.host.hostname} />
+                    <ListItemText
+                        id={`label-${this.props.host.hostname}`}
+                        primary={this.props.host.hostname}
+                    />
                     <ListItemSecondaryAction>
                         <Tooltip
                             title={
@@ -75,8 +78,11 @@ class HostComponent extends Component {
                             }
                         >
                             <span>
-                                <IconButton color="inherit" disabled={true}>
-                                    <PowerSettingsNew style={this.props.host.running? {color: "initial"}: {}}/>
+                                <IconButton
+                                    color="inherit"
+                                    disabled={true}
+                                >
+                                    <PowerSettingsNew style={this.props.host.running ? {color: "initial"} : {}} />
                                 </IconButton>
                             </span>
                         </Tooltip>
@@ -113,8 +119,8 @@ class HostComponent extends Component {
                                         this.props.host.group === HostGroups.WORKERS
                                     ) ?
                                         this.props.host.group === HostGroups.MASTERS ?
-                                            <FontAwesomeIcon icon={faServer} style={{width: "24px"}} /> :
-                                            <FontAwesomeIcon icon={faRobot} style={{width: "24px"}} />
+                                            <FontAwesomeIcon icon={faServer} style={{width: "24px", color: "initial"}} /> :
+                                            <FontAwesomeIcon icon={faRobot} style={{width: "24px", color: "initial"}} />
                                         : <Cloud/>
                                     }
                                 </IconButton>
