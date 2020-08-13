@@ -10,6 +10,7 @@ import {withStyles} from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import ChooseHostnameDialog from "./ChooseHostnameDialog";
 import HostGroups from "../../data-classes/HostGroups";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 const styles = theme => ({
@@ -20,6 +21,11 @@ const styles = theme => ({
     },
     fab: {
         margin: theme.spacing(1)
+    },
+    progress: {
+        position: 'relative',
+        top: theme.spacing(2),
+        left: '50%'
     }
 });
 
@@ -29,12 +35,16 @@ class HostsComponent extends Component {
         super(props);
         this.state = {
             hosts: [],
-            dialogOpen: false
+            dialogOpen: false,
+            hostsLoaded: false
         };
     }
 
     async componentDidMount() {
         await this.getHosts();
+        this.setState({
+            hostsLoaded: true
+        })
         this.interval = setInterval(this.getHosts, 4000)
     }
 
@@ -114,18 +124,27 @@ class HostsComponent extends Component {
                 <ChooseHostnameDialog
                     isOpen={this.state.dialogOpen}
                     handleClose={this.handleDialogClose}
-                    handleOk={this.handleDialogOk} />
-                <Paper>
-                    <List>
-                        {
-                            this.state.hosts.map((host) =>
-                                <HostComponent
-                                    key={host.hostname}
-                                    host={host} />
-                            )
-                        }
-                    </List>
-                </Paper>
+                    handleOk={this.handleDialogOk}
+                />
+
+                <div>
+                    {
+                        this.state.hostsLoaded ?
+                            <Paper>
+                                <List>
+                                    {
+                                        this.state.hosts.map((host) =>
+                                            <HostComponent
+                                                key={host.hostname}
+                                                host={host} />
+                                        )
+                                    }
+                                </List>
+                            </Paper> :
+                            <CircularProgress className={classes.progress} />
+                    }
+                </div>
+
                 <div className={classes.fabDiv}>
                     <Tooltip title="Setup Proxmox" aria-label="setup proxmox">
                         <Fab color="primary" className={classes.fab} onClick={this.setupProxmox}>
