@@ -8,10 +8,6 @@ export default class TaskApi {
 
     static getTask(taskId) {
         return fetch(`${this.baseUrl}/task/info/${taskId}`)
-            .then(response => {
-                return response.json();
-            }).catch(error => {
-                return error;
-            });
+            .then(response => response.json());
     }
 }

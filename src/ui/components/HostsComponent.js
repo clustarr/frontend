@@ -35,17 +35,15 @@ class HostsComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            isLoaded: false,
+            error: false,
             hosts: [],
-            dialogOpen: false,
-            hostsLoaded: false
+            dialogOpen: false
         };
     }
 
     async componentDidMount() {
-        await this.getHosts();
-        this.setState({
-            hostsLoaded: true
-        })
+        this.getHosts();
         this.interval = setInterval(this.getHosts, 4000)
     }
 
@@ -53,39 +51,46 @@ class HostsComponent extends Component {
         clearInterval(this.interval);
     }
 
-    getHosts = async () => {
-        let inventoryList = await AnsibleApi.listInventory();
+    getHosts = () => {
+        AnsibleApi.listInventory()
+            .then(inventoryList => {
+                let allHosts = Object.keys(inventoryList['_meta']['hostvars'])
 
-        if (!inventoryList['_meta']) {
-            return;
-        }
-        let allHosts = Object.keys(inventoryList['_meta']['hostvars'])
-
-        let runningHosts = [];
-        if (inventoryList['running']) {
-            runningHosts = inventoryList['running']['hosts']
-        }
-
-        let hosts = [];
-        for (let hostname of allHosts) {
-            let host = new Host();
-            host.hostname = hostname;
-            host.running = runningHosts.includes(hostname);
-            for (let group of [HostGroups.MASTERS, HostGroups.WORKERS, HostGroups.INDEPENDENTS]) {
-                let groupHosts = []
-                if (inventoryList[group]) {
-                    groupHosts = inventoryList[group]['hosts']
+                let runningHosts = [];
+                if (inventoryList['running']) {
+                    runningHosts = inventoryList['running']['hosts']
                 }
-                if (groupHosts.includes(hostname)) {
-                    host.group = group;
-                }
-            }
-            hosts.push(host);
-        }
 
-        this.setState({
-            hosts: hosts,
-        })
+                let hosts = [];
+                for (let hostname of allHosts) {
+                    let host = new Host();
+                    host.hostname = hostname;
+                    host.running = runningHosts.includes(hostname);
+                    for (let group of [HostGroups.MASTERS, HostGroups.WORKERS, HostGroups.INDEPENDENTS]) {
+                        let groupHosts = []
+                        if (inventoryList[group]) {
+                            groupHosts = inventoryList[group]['hosts']
+                        }
+                        if (groupHosts.includes(hostname)) {
+                            host.group = group;
+                        }
+                    }
+                    hosts.push(host);
+                }
+
+                this.setState({
+                    isLoaded: true,
+                    error: false,
+                    hosts: hosts,
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+                this.setState({
+                    isLoaded: true,
+                    error: true
+                });
+            });
     }
 
     openDialog = () => {
@@ -130,22 +135,28 @@ class HostsComponent extends Component {
 
                 <div>
                     {
-                        this.state.hostsLoaded ?
-                            this.state.hosts.length > 0 ?
-                                <Paper>
-                                    <List>
-                                        {
-                                            this.state.hosts.map((host) =>
-                                                <HostComponent
-                                                    key={host.hostname}
-                                                    host={host} />
-                                            )
-                                        }
-                                    </List>
-                                </Paper> :
+                        this.state.isLoaded ?
+                            this.state.error ?
                                 <Alert variant="outlined" severity="error">
                                     Hosts could not be loaded
                                 </Alert>
+                                :
+                                this.state.hosts.length === 0 ?
+                                    <Alert variant="outlined" severity="info">
+                                        No Hosts available
+                                    </Alert>
+                                    :
+                                    <Paper>
+                                        <List>
+                                            {
+                                                this.state.hosts.map((host) =>
+                                                    <HostComponent
+                                                        key={host.hostname}
+                                                        host={host} />
+                                                )
+                                            }
+                                        </List>
+                                    </Paper>
                             :
                             <CircularProgress className={classes.progress} />
                     }

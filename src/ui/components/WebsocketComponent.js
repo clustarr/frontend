@@ -30,13 +30,17 @@ class WebsocketComponent extends Component {
             console.log(message);
 
             let taskId = message["uuid"];
-            let task = await TaskApi.getTask(taskId);
-            let variant = this.props.variant;
-
-            this.props.enqueueSnackbar(
-                `Playbook ${this.props.suffix}: ${task["kwargs"]}`,
-                {variant}
-            );
+            TaskApi.getTask(taskId)
+                .then(task => {
+                    let variant = this.props.variant;
+                    this.props.enqueueSnackbar(
+                        `Playbook ${this.props.suffix}: ${task["kwargs"]}`,
+                        {variant}
+                    );
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
         }
 
         this.websocket.onclose = () => {

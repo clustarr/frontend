@@ -31,11 +31,16 @@ class PlaybookOutputDialog extends Component {
     }
 
     getOutput = async () => {
-        let response = await AnsibleApi.getPlaybookOutput(this.props.task.id);
-        let taskOutput = response.output
-        this.setState({
-            taskOutput: taskOutput
-        })
+        AnsibleApi.getPlaybookOutput(this.props.task.id)
+            .then(response => {
+                let taskOutput = response.output
+                this.setState({
+                    taskOutput: taskOutput
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
     render() {

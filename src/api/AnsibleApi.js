@@ -10,28 +10,16 @@ export default class AnsibleApi {
             body: JSON.stringify(body)
         };
         return fetch(`${this.baseUrl}/playbook`, requestOptions)
-            .then(response => {
-                return response.json();
-            }).catch(error => {
-                return error;
-            });
+            .then(response => response.json());
     }
 
     static getPlaybookOutput(taskId) {
         return fetch(`${this.baseUrl}/playbook/${taskId}`)
-            .then(response => {
-                return response.json();
-            }).catch(error => {
-                return error;
-            });
+            .then(response => response.json());
     }
 
     static listInventory() {
         return fetch(`${this.baseUrl}/inventory?inventory=/etc/ansible/proxmox.py`)
-            .then(response => {
-                return response.json();
-            }).catch(error => {
-                return error;
-            });
+            .then(response => response.json());
     }
 }
