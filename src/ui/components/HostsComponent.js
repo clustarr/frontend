@@ -45,6 +45,9 @@ class HostsComponent extends Component {
     getHosts = async () => {
         let inventoryList = await AnsibleApi.listInventory();
 
+        if (!inventoryList['_meta']) {
+            return;
+        }
         let allHosts = Object.keys(inventoryList['_meta']['hostvars'])
 
         let runningHosts = [];
