@@ -11,6 +11,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import ChooseHostnameDialog from "./ChooseHostnameDialog";
 import HostGroups from "../../data-classes/HostGroups";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Alert from "@material-ui/lab/Alert";
+import AlertTitle from "@material-ui/lab/AlertTitle";
 
 
 const styles = theme => ({
@@ -130,17 +132,22 @@ class HostsComponent extends Component {
                 <div>
                     {
                         this.state.hostsLoaded ?
-                            <Paper>
-                                <List>
-                                    {
-                                        this.state.hosts.map((host) =>
-                                            <HostComponent
-                                                key={host.hostname}
-                                                host={host} />
-                                        )
-                                    }
-                                </List>
-                            </Paper> :
+                            this.state.hosts.length > 0 ?
+                                <Paper>
+                                    <List>
+                                        {
+                                            this.state.hosts.map((host) =>
+                                                <HostComponent
+                                                    key={host.hostname}
+                                                    host={host} />
+                                            )
+                                        }
+                                    </List>
+                                </Paper> :
+                                <Alert variant="outlined" severity="error">
+                                    Hosts could not be loaded
+                                </Alert>
+                            :
                             <CircularProgress className={classes.progress} />
                     }
                 </div>
