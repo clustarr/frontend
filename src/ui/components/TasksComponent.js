@@ -31,13 +31,16 @@ class TasksComponent extends Component {
         for (let taskId of taskIds) {
             let task = new Task();
             task.id = taskId
-            task.state = taskList[taskId].state
+            task.state = taskList[taskId]["state"]
             task.name = taskList[taskId]["kwargs"]
+            task.datetime = taskList[taskId]["received"]
             tasks.push(task);
         }
 
+        let tasksSorted = tasks.sort((a, b) => parseFloat(b.datetime) - parseFloat(a.datetime));
+
         this.setState({
-            tasks: tasks,
+            tasks: tasksSorted,
         })
     }
 
