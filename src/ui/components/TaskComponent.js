@@ -32,7 +32,7 @@ class TaskComponent extends Component {
                     task={this.props.task}
                 />
                 <ListItem button key={`listitem-${this.props.task.id}`} onClick={this.openDialog}>
-                    <ListItemText id={`label-${this.props.task.id}`} primary={this.props.task.state + " | " + this.props.task.id} />
+                    <ListItemText id={`label-${this.props.task.id}`} primary={this.props.task.name + " | " + this.props.task.state + " | " + this.props.task.id} />
                 </ListItem>
             </React.Fragment>
         );

@@ -4,6 +4,7 @@ import List from "@material-ui/core/List";
 import TaskApi from "../../api/TaskApi";
 import Task from "../../data-classes/Task";
 import TaskComponent from "./TaskComponent";
+import TaskApiHelper from "../../api/TaskApiHelper";
 
 class TasksComponent extends Component {
     constructor(props) {
@@ -32,6 +33,7 @@ class TasksComponent extends Component {
             let task = new Task();
             task.id = taskId
             task.state = taskList[taskId].state
+            task.name = TaskApiHelper.getPlaybook(taskList[taskId])
             tasks.push(task);
         }
 

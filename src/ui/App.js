@@ -49,7 +49,7 @@ class App extends Component {
         };
     }
 
-    displayOverview = () => {
+    displayHosts = () => {
         this.setState({
             displayComponent: <HostsComponent/>
         })
@@ -97,11 +97,11 @@ class App extends Component {
                         <Toolbar />
                         <div className={classes.drawerContainer}>
                             <List>
-                                <ListItem button key="overview" onClick={this.displayOverview}>
+                                <ListItem button key="hosts" onClick={this.displayHosts}>
                                     <ListItemIcon>
                                         <Home/>
                                     </ListItemIcon>
-                                    <ListItemText primary="Overview" />
+                                    <ListItemText primary="Hosts" />
                                 </ListItem>
                                 <ListItem button key="tasks" onClick={this.displayTasks}>
                                     <ListItemIcon>
