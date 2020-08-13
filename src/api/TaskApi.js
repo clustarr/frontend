@@ -3,11 +3,7 @@ export default class TaskApi {
 
     static listTasks() {
         return fetch(`${this.baseUrl}/tasks`)
-            .then(response => {
-                return response.json();
-            }).catch(error => {
-                return error;
-            });
+            .then(response => response.json());
     }
 
     static getTask(taskId) {
