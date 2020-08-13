@@ -4,6 +4,7 @@ import List from "@material-ui/core/List";
 import TaskApi from "../../api/TaskApi";
 import Task from "../../data-classes/Task";
 import TaskComponent from "./TaskComponent";
+import Alert from "@material-ui/lab/Alert";
 
 class TasksComponent extends Component {
     constructor(props) {
@@ -45,6 +46,12 @@ class TasksComponent extends Component {
     }
 
     render() {
+        if (this.state.tasks.length === 0) {
+            return <Alert variant="outlined" severity="error">
+                Tasks could not be loaded
+            </Alert>
+        }
+
         return (
             <Paper>
                 <List>

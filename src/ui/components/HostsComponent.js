@@ -12,7 +12,6 @@ import ChooseHostnameDialog from "./ChooseHostnameDialog";
 import HostGroups from "../../data-classes/HostGroups";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Alert from "@material-ui/lab/Alert";
-import AlertTitle from "@material-ui/lab/AlertTitle";
 
 
 const styles = theme => ({
