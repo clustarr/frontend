@@ -65,9 +65,18 @@ class App extends Component {
         const { classes } = this.props;
         return (
             <React.Fragment>
-                <WebsocketComponent url="ws://127.0.0.1:5555/api/task/events/task-started/" message="Playbook started" severity="info" />
-                <WebsocketComponent url="ws://127.0.0.1:5555/api/task/events/task-succeeded/" message="Playbook succeeded" severity="success" />
-                <WebsocketComponent url="ws://127.0.0.1:5555/api/task/events/task-failed/" message="Playbook failed" severity="error" />
+                <WebsocketComponent
+                    url="ws://127.0.0.1:5555/api/task/events/task-started/"
+                    message="Playbook started"
+                    variant="info" />
+                <WebsocketComponent
+                    url="ws://127.0.0.1:5555/api/task/events/task-succeeded/"
+                    message="Playbook succeeded"
+                    variant="success" />
+                <WebsocketComponent
+                    url="ws://127.0.0.1:5555/api/task/events/task-failed/"
+                    message="Playbook failed"
+                    variant="error" />
 
                 <div className={classes.root}>
                     <CssBaseline />

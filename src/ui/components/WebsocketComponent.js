@@ -1,15 +1,7 @@
 import React, {Component} from "react";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from '@material-ui/lab/Alert';
+import {withSnackbar} from "notistack";
 
 class WebsocketComponent extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            dialogOpen: false
-        }
-    }
-
     componentDidMount() {
         this.connectWebsocket();
         this.interval = setInterval(this.checkWebsocket, 2000)
@@ -32,12 +24,11 @@ class WebsocketComponent extends Component {
             console.log(`connected websocket ${this.websocket.url}`);
         }
 
+        let variant = this.props.variant;
         this.websocket.onmessage = e => {
             let message = JSON.parse(e.data);
             console.log(message);
-            this.setState({
-                dialogOpen: true
-            })
+            this.props.enqueueSnackbar(this.props.message, { variant });
         }
 
         this.websocket.onclose = () => {
@@ -46,21 +37,12 @@ class WebsocketComponent extends Component {
     }
 
     handleClose = () => {
-        this.setState({
-            dialogOpen: false
-        })
         clearInterval(this.interval);
     }
 
     render() {
-        return (
-            <Snackbar open={this.state.dialogOpen} autoHideDuration={6000} onClose={this.handleClose}>
-                <MuiAlert elevation={6} variant="filled" severity={this.props.severity} onClose={this.handleClose}>
-                    {this.props.message}
-                </MuiAlert>
-            </Snackbar>
-        )
+        return null;
     }
 }
 
-export default WebsocketComponent;
+export default withSnackbar(WebsocketComponent);
