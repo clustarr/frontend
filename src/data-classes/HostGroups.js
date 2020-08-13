@@ -1,6 +1,7 @@
 let HostGroups = {
     MASTERS: "masters",
-    WORKERS: "workers"
+    WORKERS: "workers",
+    INDEPENDENTS: "independents"
 };
 
 export default HostGroups;

@@ -61,10 +61,19 @@ class HostComponent extends Component {
                     handleClose={this.handleDialogClose}
                     handleOk={this.handleDialogOk} />
 
-                <ListItem key={`listitem-${this.props.host.hostname}`}>
+                <ListItem
+                    key={`listitem-${this.props.host.hostname}`}
+                    disabled={!this.props.host.group}
+                >
                     <ListItemText id={`label-${this.props.host.hostname}`} primary={this.props.host.hostname} />
                     <ListItemSecondaryAction>
-                        <Tooltip title={"host is powered " + (this.props.host.running ? "on": "off")}>
+                        <Tooltip
+                            title={
+                                !this.props.host.group ?
+                                    "" :
+                                    "host is powered " + (this.props.host.running ? "on": "off")
+                            }
+                        >
                             <span>
                                 <IconButton color="inherit" disabled={true}>
                                     <PowerSettingsNew style={this.props.host.running? {color: "initial"}: {}}/>
@@ -74,11 +83,13 @@ class HostComponent extends Component {
 
                         <Tooltip
                             title={
-                                this.props.host.group === HostGroups.MASTERS ?
-                                    "host is a master" :
-                                    this.props.host.group === HostGroups.WORKERS ?
-                                        "host is a worker" :
-                                        "add host to cluster"
+                                !this.props.host.group ?
+                                    "" :
+                                    this.props.host.group === HostGroups.MASTERS ?
+                                        "host is a master" :
+                                        this.props.host.group === HostGroups.WORKERS ?
+                                            "host is a worker" :
+                                            "add host to cluster"
                             }>
                             <span>
                                 <IconButton
@@ -93,7 +104,8 @@ class HostComponent extends Component {
                                     color="inherit"
                                     disabled={
                                         this.props.host.group === HostGroups.MASTERS ||
-                                        this.props.host.group === HostGroups.WORKERS
+                                        this.props.host.group === HostGroups.WORKERS ||
+                                        !this.props.host.group
                                     }
                                     onClick={this.openDialog} >
                                     {(
@@ -110,9 +122,16 @@ class HostComponent extends Component {
                         </Tooltip>
 
                         <Tooltip title="delete host">
-                            <IconButton aria-label="delete host" color="inherit" onClick={this.deleteHost}>
-                                <Delete/>
-                            </IconButton>
+                            <span>
+                                <IconButton
+                                    aria-label="delete host"
+                                    color="inherit"
+                                    onClick={this.deleteHost}
+                                    disabled={!this.props.host.group}
+                                >
+                                    <Delete/>
+                                </IconButton>
+                            </span>
                         </Tooltip>
                     </ListItemSecondaryAction>
                 </ListItem>

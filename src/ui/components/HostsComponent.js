@@ -57,7 +57,7 @@ class HostsComponent extends Component {
             let host = new Host();
             host.hostname = hostname;
             host.running = runningHosts.includes(hostname);
-            for (let group of [HostGroups.MASTERS, HostGroups.WORKERS]) {
+            for (let group of [HostGroups.MASTERS, HostGroups.WORKERS, HostGroups.INDEPENDENTS]) {
                 let groupHosts = []
                 if (inventoryList[group]) {
                     groupHosts = inventoryList[group]['hosts']
