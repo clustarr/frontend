@@ -1,5 +1,6 @@
-import React, {Component} from "react";
+import {Component} from "react";
 import {withSnackbar} from "notistack";
+import TaskApi from "../../api/TaskApi";
 
 class WebsocketComponent extends Component {
     componentDidMount() {
@@ -24,16 +25,43 @@ class WebsocketComponent extends Component {
             console.log(`connected websocket ${this.websocket.url}`);
         }
 
-        let variant = this.props.variant;
-        this.websocket.onmessage = e => {
+        this.websocket.onmessage = async e => {
             let message = JSON.parse(e.data);
             console.log(message);
-            this.props.enqueueSnackbar(this.props.message, { variant });
+
+            let taskId = message.uuid;
+            let playbook = await this.getPlaybook(taskId);
+
+            let variant = this.props.variant;
+
+            this.props.enqueueSnackbar(
+                `Playbook ${playbook} ${this.props.suffix}`,
+                {variant}
+            );
         }
 
         this.websocket.onclose = () => {
             console.log(`disconnected websocket ${this.websocket.url}`);
         }
+    }
+
+    getTaskArgs = async (taskId) => {
+        let response = await TaskApi.getTask(taskId);
+        let args = response.args;
+        let argsList = [];
+        for (let arg of args.slice(1, args.length-1).split(",")) {
+            if (arg !== "") {
+                argsList.push(arg);
+            }
+        }
+        return argsList;
+    }
+
+    getPlaybook = async (taskId) => {
+        let argsList = await this.getTaskArgs(taskId);
+        let jsonStr = argsList[0].replaceAll('\'', '"');
+        let json = JSON.parse(jsonStr);
+        return json.playbook;
     }
 
     handleClose = () => {

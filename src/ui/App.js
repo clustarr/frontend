@@ -67,15 +67,15 @@ class App extends Component {
             <React.Fragment>
                 <WebsocketComponent
                     url="ws://127.0.0.1:5555/api/task/events/task-started/"
-                    message="Playbook started"
+                    suffix="started"
                     variant="info" />
                 <WebsocketComponent
                     url="ws://127.0.0.1:5555/api/task/events/task-succeeded/"
-                    message="Playbook succeeded"
+                    suffix="succeeded"
                     variant="success" />
                 <WebsocketComponent
                     url="ws://127.0.0.1:5555/api/task/events/task-failed/"
-                    message="Playbook failed"
+                    suffix="failed"
                     variant="error" />
 
                 <div className={classes.root}>
