@@ -6,8 +6,38 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import AnsibleApi from "../../api/AnsibleApi";
 
 class PlaybookOutputDialog extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            taskOutput: ""
+        };
+    }
+
+    async componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.isOpen === false && this.props.isOpen === true) {
+            await this.getOutput();
+            this.interval = setInterval(this.getOutput, 1000)
+        }
+        if (prevProps.isOpen === true && this.props.isOpen === false) {
+            clearInterval(this.interval);
+        }
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    getOutput = async () => {
+        let response = await AnsibleApi.getPlaybookOutput(this.props.task.id);
+        let taskOutput = response.output
+        this.setState({
+            taskOutput: taskOutput
+        })
+    }
+
     render() {
         return (
             <Dialog
@@ -24,7 +54,7 @@ class PlaybookOutputDialog extends Component {
                         tabIndex={-1}
                     >
                         <Typography component="span" variant="body1" style={{whiteSpace: 'pre-line'}}>
-                            {this.props.taskOutput}
+                            {this.state.taskOutput}
                         </Typography>
                     </DialogContentText>
                 </DialogContent>
