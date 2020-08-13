@@ -1,7 +1,6 @@
 import {Component} from "react";
 import {withSnackbar} from "notistack";
 import TaskApi from "../../api/TaskApi";
-import TaskApiHelper from "../../api/TaskApiHelper";
 
 class WebsocketComponent extends Component {
     componentDidMount() {
@@ -30,14 +29,12 @@ class WebsocketComponent extends Component {
             let message = JSON.parse(e.data);
             console.log(message);
 
-            let taskId = message.uuid;
+            let taskId = message["uuid"];
             let task = await TaskApi.getTask(taskId);
-            let playbook = TaskApiHelper.getPlaybook(task);
-
             let variant = this.props.variant;
 
             this.props.enqueueSnackbar(
-                `Playbook ${playbook} ${this.props.suffix}`,
+                `Playbook ${this.props.suffix}: ${task["kwargs"]}`,
                 {variant}
             );
         }
