@@ -3,15 +3,15 @@ import Paper from "@material-ui/core/Paper";
 import List from "@material-ui/core/List";
 import HostComponent from "./HostComponent";
 import AnsibleApi from "../../api/AnsibleApi";
-import Host from "../../data-classes/Host";
 import Fab from "@material-ui/core/Fab";
 import {Add, Settings} from "@material-ui/icons";
 import {withStyles} from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import ChooseHostnameDialog from "./ChooseHostnameDialog";
-import HostGroups from "../../data-classes/HostGroups";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import {connect} from "react-redux";
+import {getHosts} from "../../redux/actions/hosts-actions";
 import Alert from "@material-ui/lab/Alert";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 const styles = theme => ({
@@ -35,62 +35,17 @@ class HostsComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoaded: false,
-            error: false,
-            hosts: [],
             dialogOpen: false
         };
     }
 
-    async componentDidMount() {
-        this.getHosts();
-        this.interval = setInterval(this.getHosts, 4000)
+    componentDidMount() {
+        this.props.getHosts();
+        this.interval = setInterval(this.props.getHosts, 4000)
     }
 
     componentWillUnmount() {
         clearInterval(this.interval);
-    }
-
-    getHosts = () => {
-        AnsibleApi.listInventory()
-            .then(inventoryList => {
-                let allHosts = Object.keys(inventoryList['_meta']['hostvars'])
-
-                let runningHosts = [];
-                if (inventoryList['running']) {
-                    runningHosts = inventoryList['running']['hosts']
-                }
-
-                let hosts = [];
-                for (let hostname of allHosts) {
-                    let host = new Host();
-                    host.hostname = hostname;
-                    host.running = runningHosts.includes(hostname);
-                    for (let group of [HostGroups.MASTERS, HostGroups.WORKERS, HostGroups.INDEPENDENTS]) {
-                        let groupHosts = []
-                        if (inventoryList[group]) {
-                            groupHosts = inventoryList[group]['hosts']
-                        }
-                        if (groupHosts.includes(hostname)) {
-                            host.group = group;
-                        }
-                    }
-                    hosts.push(host);
-                }
-
-                this.setState({
-                    isLoaded: true,
-                    error: false,
-                    hosts: hosts,
-                })
-            })
-            .catch((error) => {
-                console.log(error);
-                this.setState({
-                    isLoaded: true,
-                    error: true
-                });
-            });
     }
 
     openDialog = () => {
@@ -123,7 +78,7 @@ class HostsComponent extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const {classes} = this.props;
 
         return (
             <React.Fragment>
@@ -135,13 +90,13 @@ class HostsComponent extends Component {
 
                 <div>
                     {
-                        this.state.isLoaded ?
-                            this.state.error ?
+                        this.props.loaded ?
+                            this.props.error ?
                                 <Alert variant="outlined" severity="error">
                                     Hosts could not be loaded
                                 </Alert>
                                 :
-                                this.state.hosts.length === 0 ?
+                                this.props.hosts.length === 0 ?
                                     <Alert variant="outlined" severity="info">
                                         No Hosts available
                                     </Alert>
@@ -149,7 +104,7 @@ class HostsComponent extends Component {
                                     <Paper>
                                         <List>
                                             {
-                                                this.state.hosts.map((host) =>
+                                                this.props.hosts.map((host) =>
                                                     <HostComponent
                                                         key={host.hostname}
                                                         host={host} />
@@ -179,4 +134,18 @@ class HostsComponent extends Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(HostsComponent);
+const mapStateToProps = (state) => ({
+    hosts: state.hostsReducer.hosts,
+    error: state.hostsReducer.error,
+    loaded: state.hostsReducer.loaded
+});
+
+const mapDispatchToProps = {
+    getHosts
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+    withStyles(styles, { withTheme: true })(
+        HostsComponent
+    )
+);
