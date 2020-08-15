@@ -4,12 +4,16 @@ import './index.css';
 import App from './ui/App';
 import * as serviceWorker from './serviceWorker';
 import {SnackbarProvider} from "notistack";
+import {Provider} from "react-redux";
+import store from "./redux/store";
 
 ReactDOM.render(
-    <SnackbarProvider maxSnack={3}>
-        <App />
-    </SnackbarProvider>,
-  document.getElementById('root')
+    <Provider store={store}>
+        <SnackbarProvider maxSnack={3}>
+            <App />
+        </SnackbarProvider>
+    </Provider>,
+    document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
