@@ -63,18 +63,21 @@ class App extends Component {
 
     render() {
         const { classes } = this.props;
+        
+        let websocketBaseUrl = `ws://${process.env.REACT_APP_FLOWER_HOST}:${process.env.REACT_APP_FLOWER_PORT}/api/task/events`;
+
         return (
             <React.Fragment>
                 <WebsocketComponent
-                    url="ws://127.0.0.1:5555/api/task/events/task-started/"
+                    url={`${websocketBaseUrl}/task-started/`}
                     suffix="started"
                     variant="info" />
                 <WebsocketComponent
-                    url="ws://127.0.0.1:5555/api/task/events/task-succeeded/"
+                    url={`${websocketBaseUrl}/task-succeeded/`}
                     suffix="succeeded"
                     variant="success" />
                 <WebsocketComponent
-                    url="ws://127.0.0.1:5555/api/task/events/task-failed/"
+                    url={`${websocketBaseUrl}/task-failed/`}
                     suffix="failed"
                     variant="error" />
 
