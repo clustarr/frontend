@@ -71,11 +71,7 @@ class HostComponent extends Component {
                     />
                     <ListItemSecondaryAction>
                         <Tooltip
-                            title={
-                                !this.props.host.group ?
-                                    "" :
-                                    "host is powered " + (this.props.host.running ? "on": "off")
-                            }
+                            title={"host is powered " + (this.props.host.running ? "on": "off")}
                         >
                             <span>
                                 <IconButton
@@ -127,7 +123,7 @@ class HostComponent extends Component {
                             </span>
                         </Tooltip>
 
-                        <Tooltip title="delete host">
+                        <Tooltip title={!this.props.host.group ? "" : "delete host"}>
                             <span>
                                 <IconButton
                                     aria-label="delete host"

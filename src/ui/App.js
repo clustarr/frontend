@@ -63,7 +63,7 @@ class App extends Component {
 
     render() {
         const { classes } = this.props;
-        
+
         let websocketBaseUrl = `ws://${process.env.REACT_APP_FLOWER_HOST}:${process.env.REACT_APP_FLOWER_PORT}/api/task/events`;
 
         return (
