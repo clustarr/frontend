@@ -10,8 +10,13 @@ class ChooseHostnameDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            hostname: ""
+            hostname: `clustarr-${this.generateGuid()}`
         };
+    }
+
+    generateGuid = () => {
+        // https://stackoverflow.com/a/13403498
+        return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     }
 
     handleHostTypeChange = (event) => {
@@ -35,6 +40,7 @@ class ChooseHostnameDialog extends Component {
                         label="Hostname"
                         type="text"
                         fullWidth
+                        value={this.state.hostname}
                         onChange={this.handleHostTypeChange}
                     />
                 </DialogContent>
