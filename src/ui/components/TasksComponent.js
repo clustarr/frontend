@@ -9,11 +9,6 @@ import Alert from "@material-ui/lab/Alert";
 class TasksComponent extends Component {
     componentDidMount() {
         this.props.getTasks();
-        this.interval = setInterval(this.props.getTasks, 2000)
-    }
-
-    componentWillUnmount() {
-        clearInterval(this.interval);
     }
 
     render() {

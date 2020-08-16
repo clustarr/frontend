@@ -17,9 +17,4 @@ export default class AnsibleApi {
         return fetch(`${this.baseUrl}/playbook/${taskId}`)
             .then(response => response.json());
     }
-
-    static listInventory() {
-        return fetch(`${this.baseUrl}/inventory?inventory=/etc/ansible/proxmox.py`)
-            .then(response => response.json());
-    }
 }
