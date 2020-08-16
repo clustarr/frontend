@@ -34,7 +34,7 @@ class TasksComponent extends Component {
                                 <Paper>
                                     <List>
                                         {
-                                            this.state.tasks.map((task) =>
+                                            this.props.tasks.map((task) =>
                                                 <TaskComponent
                                                     key={task.id}
                                                     task={task} />
