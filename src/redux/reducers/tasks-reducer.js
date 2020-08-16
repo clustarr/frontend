@@ -1,4 +1,5 @@
 import {ADD_TASKS, TASKS_ERROR, TASKS_LOADED} from "../actions/get-tasks-action";
+import {ADD_TASK} from "../actions/get-task-action";
 import Task from "../../data-classes/Task";
 
 const initialState = {
@@ -7,6 +8,19 @@ const initialState = {
     loaded: false
 };
 
+const parseTask = (rawTask) => {
+    let task = new Task();
+    task.id = rawTask["uuid"]
+    task.state = rawTask["state"]
+    task.name = rawTask["kwargs"]
+    task.datetime = rawTask["received"]
+    return task;
+}
+
+const sortTasks = (tasks) => {
+    return tasks.sort((a, b) => parseFloat(b.datetime) - parseFloat(a.datetime));
+}
+
 export const tasksReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_TASKS:
@@ -14,20 +28,22 @@ export const tasksReducer = (state = initialState, action) => {
             let taskIds = Object.keys(taskList);
             let tasks = [];
             for (let taskId of taskIds) {
-                let task = new Task();
-                task.id = taskId
-                task.state = taskList[taskId]["state"]
-                task.name = taskList[taskId]["kwargs"]
-                task.datetime = taskList[taskId]["received"]
+                let task = parseTask(taskList[taskId]);
                 tasks.push(task);
             }
-
-            let tasksSorted = tasks.sort((a, b) => parseFloat(b.datetime) - parseFloat(a.datetime));
             return {
                 ...state,
-                tasks: tasksSorted,
+                tasks: sortTasks(tasks),
                 error: ""
             };
+        case ADD_TASK:
+            return {
+                ...state,
+                tasks: sortTasks([
+                    ...state.tasks,
+                    parseTask(action.data)
+                ])
+            }
         case TASKS_ERROR:
             return {
                 ...state,
