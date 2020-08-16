@@ -12,7 +12,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import HostsComponent from "./components/HostsComponent";
 import {withStyles} from "@material-ui/core/styles";
 import TasksComponent from "./components/TasksComponent";
-import WebsocketComponent from "./components/WebsocketComponent";
+import {getTasks} from "../redux/actions/get-tasks-action";
+import {connect} from "react-redux";
 
 
 const drawerWidth = 240;
@@ -49,6 +50,15 @@ class App extends Component {
         };
     }
 
+    componentDidMount() {
+        this.props.getTasks();
+        this.interval = setInterval(this.props.getTasks, 2000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
     displayHosts = () => {
         this.setState({
             displayComponent: <HostsComponent/>
@@ -62,25 +72,10 @@ class App extends Component {
     }
 
     render() {
-        const { classes } = this.props;
-
-        let websocketBaseUrl = `ws://${process.env.REACT_APP_FLOWER_HOST}:${process.env.REACT_APP_FLOWER_PORT}/api/task/events`;
+        const {classes} = this.props;
 
         return (
             <React.Fragment>
-                <WebsocketComponent
-                    url={`${websocketBaseUrl}/task-started/`}
-                    suffix="started"
-                    variant="info" />
-                <WebsocketComponent
-                    url={`${websocketBaseUrl}/task-succeeded/`}
-                    suffix="succeeded"
-                    variant="success" />
-                <WebsocketComponent
-                    url={`${websocketBaseUrl}/task-failed/`}
-                    suffix="failed"
-                    variant="error" />
-
                 <div className={classes.root}>
                     <CssBaseline />
                     <AppBar position="fixed" className={classes.appBar}>
@@ -125,4 +120,10 @@ class App extends Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(App);
+const mapDispatchToProps = {
+    getTasks
+};
+
+export default connect(null, mapDispatchToProps)(
+    withStyles(styles, { withTheme: true })(App)
+);

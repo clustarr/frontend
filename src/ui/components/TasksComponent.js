@@ -7,10 +7,6 @@ import {getTasks} from "../../redux/actions/get-tasks-action";
 import Alert from "@material-ui/lab/Alert";
 
 class TasksComponent extends Component {
-    componentDidMount() {
-        this.props.getTasks();
-    }
-
     render() {
         return (
             <div>
