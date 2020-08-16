@@ -14,6 +14,7 @@ import {withStyles} from "@material-ui/core/styles";
 import TasksComponent from "./components/TasksComponent";
 import {getTasks} from "../redux/actions/get-tasks-action";
 import {connect} from "react-redux";
+import Badge from "@material-ui/core/Badge";
 
 
 const drawerWidth = 240;
@@ -71,6 +72,10 @@ class App extends Component {
         })
     }
 
+    countRunningTasks = () => {
+        return this.props.tasks.filter(task => !(task.state === "SUCCESS" || task.state === "FAILURE")).length;
+    }
+
     render() {
         const {classes} = this.props;
 
@@ -103,7 +108,12 @@ class App extends Component {
                                 </ListItem>
                                 <ListItem button key="tasks" onClick={this.displayTasks}>
                                     <ListItemIcon>
-                                        <Memory/>
+                                        <Badge
+                                            badgeContent={this.countRunningTasks()}
+                                            color="primary"
+                                        >
+                                            <Memory/>
+                                        </Badge>
                                     </ListItemIcon>
                                     <ListItemText primary="Tasks" />
                                 </ListItem>
@@ -120,10 +130,14 @@ class App extends Component {
     }
 }
 
+const mapStateToProps = (state) => ({
+    tasks: state.tasksReducer.tasks
+});
+
 const mapDispatchToProps = {
     getTasks
 };
 
-export default connect(null, mapDispatchToProps)(
+export default connect(mapStateToProps, mapDispatchToProps)(
     withStyles(styles, { withTheme: true })(App)
 );
