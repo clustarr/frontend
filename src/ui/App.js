@@ -73,7 +73,11 @@ class App extends Component {
     }
 
     countRunningTasks = () => {
-        return this.props.tasks.filter(task => !(task.state === "SUCCESS" || task.state === "FAILURE")).length;
+        return this.props.tasks.filter(task => !(
+            task.state === "SUCCESS" ||
+            task.state === "FAILURE" ||
+            task.state === "REVOKED"
+        )).length;
     }
 
     render() {

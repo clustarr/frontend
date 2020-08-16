@@ -3,8 +3,13 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
 import PlaybookOutputDialog from "./PlaybookOutputDialog";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import {Done, ErrorOutline} from "@material-ui/icons";
+import {Cancel, Delete, Done, ErrorOutline} from "@material-ui/icons";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import IconButton from "@material-ui/core/IconButton";
+import Tooltip from "@material-ui/core/Tooltip";
+import AnsibleApi from "../../api/AnsibleApi";
+import FlowerApi from "../../api/FlowerApi";
 
 class TaskComponent extends Component {
     constructor(props) {
@@ -26,6 +31,10 @@ class TaskComponent extends Component {
         })
     }
 
+    cancelTask = async () => {
+        await FlowerApi.cancelTask(this.props.task.id);
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -43,7 +52,7 @@ class TaskComponent extends Component {
                         {
                             this.props.task.state === "SUCCESS" ?
                                 <Done /> :
-                                this.props.task.state === "FAILURE" ?
+                                (this.props.task.state === "FAILURE" || this.props.task.state === "REVOKED") ?
                                     <ErrorOutline /> :
                                     <CircularProgress size={24}/>
                         }
@@ -52,6 +61,23 @@ class TaskComponent extends Component {
                         id={`label-${this.props.task.id}`}
                         primary={this.props.task.name}
                     />
+                    <ListItemSecondaryAction>
+                        {
+                            !(
+                                this.props.task.state === "SUCCESS" ||
+                                this.props.task.state === "FAILURE" ||
+                                this.props.task.state === "REVOKED"
+                            ) &&
+                            <Tooltip title="cancel task">
+                                <IconButton
+                                    aria-label="cancel task"
+                                    onClick={this.cancelTask}
+                                >
+                                    <Cancel/>
+                                </IconButton>
+                            </Tooltip>
+                        }
+                    </ListItemSecondaryAction>
                 </ListItem>
             </React.Fragment>
         );
