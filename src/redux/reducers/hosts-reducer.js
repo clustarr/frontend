@@ -1,4 +1,4 @@
-import {ADD_HOSTS, CLEAR_HOSTS, HOSTS_ERROR, HOSTS_LOADED} from "../actions/hosts-actions";
+import {ADD_HOSTS, HOSTS_ERROR, HOSTS_LOADED} from "../actions/hosts-actions";
 import Host from "../../data-classes/Host";
 import HostGroups from "../../data-classes/HostGroups";
 
@@ -38,20 +38,20 @@ export const hostsReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                hosts: hosts
+                hosts: hosts,
+                error: ""
             }
         case HOSTS_ERROR:
             return {
                 ...state,
-                error: action.data
+                error: action.data,
+                hosts: []
             }
         case HOSTS_LOADED:
             return {
                 ...state,
                 loaded: true
             }
-        case CLEAR_HOSTS:
-            return initialState;
         default:
             return state;
     }
