@@ -4,7 +4,7 @@ import List from "@material-ui/core/List";
 import HostComponent from "./HostComponent";
 import AnsibleApi from "../../api/AnsibleApi";
 import Fab from "@material-ui/core/Fab";
-import {Add, Settings} from "@material-ui/icons";
+import {Add, Settings, Sync} from "@material-ui/icons";
 import {withStyles} from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import ChooseHostnameDialog from "./ChooseHostnameDialog";
@@ -71,6 +71,12 @@ class HostsComponent extends Component {
         });
     }
 
+    syncCluster = async () => {
+        await AnsibleApi.runPlaybook({
+            "playbook": "sync-cluster.yml"
+        });
+    }
+
     setupProxmox = async () => {
         await AnsibleApi.runPlaybook({
             "playbook": "setup-proxmox.yml"
@@ -121,6 +127,11 @@ class HostsComponent extends Component {
                     <Tooltip title="Setup Proxmox" aria-label="setup proxmox">
                         <Fab color="primary" className={classes.fab} onClick={this.setupProxmox}>
                             <Settings />
+                        </Fab>
+                    </Tooltip>
+                    <Tooltip title="Sync Cluster" aria-label="sync cluster">
+                        <Fab color="primary" className={classes.fab} onClick={this.syncCluster}>
+                            <Sync />
                         </Fab>
                     </Tooltip>
                     <Tooltip title="Add Host" aria-label="add host">
