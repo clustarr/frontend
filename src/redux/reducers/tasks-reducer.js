@@ -1,4 +1,4 @@
-import {ADD_TASKS, TASKS_ERROR, TASKS_LOADED} from "../actions/tasks-actions";
+import {ADD_TASKS, TASKS_ERROR, TASKS_LOADED} from "../actions/get-tasks-action";
 import Task from "../../data-classes/Task";
 
 const initialState = {

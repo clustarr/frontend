@@ -1,4 +1,4 @@
-import {ADD_HOSTS, HOSTS_ERROR, HOSTS_LOADED} from "../actions/hosts-actions";
+import {ADD_HOSTS, HOSTS_ERROR, HOSTS_LOADED} from "../actions/get-hosts-action";
 import Host from "../../data-classes/Host";
 import HostGroups from "../../data-classes/HostGroups";
 

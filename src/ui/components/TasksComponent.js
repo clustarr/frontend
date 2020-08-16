@@ -3,7 +3,7 @@ import Paper from "@material-ui/core/Paper";
 import List from "@material-ui/core/List";
 import TaskComponent from "./TaskComponent";
 import {connect} from "react-redux";
-import {getTasks} from "../../redux/actions/tasks-actions";
+import {getTasks} from "../../redux/actions/get-tasks-action";
 import Alert from "@material-ui/lab/Alert";
 
 class TasksComponent extends Component {

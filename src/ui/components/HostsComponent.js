@@ -9,7 +9,7 @@ import {withStyles} from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import ChooseHostnameDialog from "./ChooseHostnameDialog";
 import {connect} from "react-redux";
-import {getHosts} from "../../redux/actions/hosts-actions";
+import {getHosts} from "../../redux/actions/get-hosts-action";
 import Alert from "@material-ui/lab/Alert";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
