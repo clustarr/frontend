@@ -4,7 +4,7 @@ import List from "@material-ui/core/List";
 import HostComponent from "./HostComponent";
 import AnsibleApi from "../../api/AnsibleApi";
 import Fab from "@material-ui/core/Fab";
-import {Add, Settings, Sync} from "@material-ui/icons";
+import {Add,} from "@material-ui/icons";
 import {withStyles} from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import ChooseHostnameDialog from "./ChooseHostnameDialog";
@@ -15,13 +15,10 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 
 const styles = theme => ({
-    fabDiv: {
+    fab: {
         position: 'absolute',
         bottom: theme.spacing(2),
         right: theme.spacing(2)
-    },
-    fab: {
-        margin: theme.spacing(1)
     },
     progress: {
         position: 'relative',
@@ -71,18 +68,6 @@ class HostsComponent extends Component {
         });
     }
 
-    syncCluster = async () => {
-        await AnsibleApi.runPlaybook({
-            "playbook": "sync-cluster.yml"
-        });
-    }
-
-    setupProxmox = async () => {
-        await AnsibleApi.runPlaybook({
-            "playbook": "setup-proxmox.yml"
-        });
-    }
-
     render() {
         const {classes} = this.props;
 
@@ -125,23 +110,11 @@ class HostsComponent extends Component {
                     }
                 </div>
 
-                <div className={classes.fabDiv}>
-                    <Tooltip title="Setup Proxmox" aria-label="setup proxmox">
-                        <Fab color="primary" className={classes.fab} onClick={this.setupProxmox}>
-                            <Settings />
-                        </Fab>
-                    </Tooltip>
-                    <Tooltip title="Sync Cluster" aria-label="sync cluster">
-                        <Fab color="primary" className={classes.fab} onClick={this.syncCluster}>
-                            <Sync />
-                        </Fab>
-                    </Tooltip>
-                    <Tooltip title="Add Host" aria-label="add host">
-                        <Fab color="primary" className={classes.fab} onClick={this.openDialog}>
-                            <Add />
-                        </Fab>
-                    </Tooltip>
-                </div>
+                <Tooltip title="Add Host" aria-label="add host">
+                    <Fab color="primary" className={classes.fab} onClick={this.openDialog}>
+                        <Add />
+                    </Fab>
+                </Tooltip>
             </React.Fragment>
         )
     }

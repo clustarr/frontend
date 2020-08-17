@@ -7,7 +7,7 @@ import Drawer from "@material-ui/core/Drawer";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import {Home, Memory} from '@material-ui/icons';
+import {Home, Memory, MoreVert} from '@material-ui/icons';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import HostsComponent from "./components/HostsComponent";
 import {withStyles} from "@material-ui/core/styles";
@@ -15,30 +15,38 @@ import TasksComponent from "./components/TasksComponent";
 import {getTasks} from "../redux/actions/get-tasks-action";
 import {connect} from "react-redux";
 import Badge from "@material-ui/core/Badge";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import AnsibleApi from "../api/AnsibleApi";
+import Tooltip from "@material-ui/core/Tooltip";
 
 
 const drawerWidth = 240;
 
 const styles = theme => ({
     root: {
-        display: 'flex',
+        display: 'flex'
     },
     appBar: {
-        zIndex: theme.zIndex.drawer + 1,
+        zIndex: theme.zIndex.drawer + 1
     },
     drawer: {
         width: drawerWidth,
-        flexShrink: 0,
+        flexShrink: 0
     },
     drawerPaper: {
-        width: drawerWidth,
+        width: drawerWidth
     },
     drawerContainer: {
-        overflow: 'auto',
+        overflow: 'auto'
     },
     content: {
         flexGrow: 1,
         padding: theme.spacing(3)
+    },
+    title: {
+        flexGrow: 1
     },
 });
 
@@ -47,7 +55,8 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            displayComponent: <HostsComponent/>
+            displayComponent: <HostsComponent/>,
+            anchorEl: null
         };
     }
 
@@ -72,6 +81,42 @@ class App extends Component {
         })
     }
 
+    setupProxmox = async () => {
+        this.handleMoreMenuClose();
+
+        await AnsibleApi.runPlaybook({
+            "playbook": "setup-proxmox.yml"
+        });
+    }
+
+    rkeUp = async () => {
+        this.handleMoreMenuClose();
+
+        await AnsibleApi.runPlaybook({
+            "playbook": "sync-cluster.yml"
+        });
+    }
+
+    rkeRemove = async () => {
+        this.handleMoreMenuClose();
+
+        await AnsibleApi.runPlaybook({
+            "playbook": "sync-cluster.yml"
+        });
+    }
+
+    handleMoreMenuClick = (event) => {
+        this.setState({
+            anchorEl: event.currentTarget
+        });
+    };
+
+    handleMoreMenuClose = () => {
+        this.setState({
+            anchorEl: null
+        });
+    };
+
     countRunningTasks = () => {
         return this.props.tasks.filter(task => !(
             task.state === "SUCCESS" ||
@@ -89,9 +134,32 @@ class App extends Component {
                     <CssBaseline />
                     <AppBar position="fixed" className={classes.appBar}>
                         <Toolbar>
-                            <Typography variant="h6" noWrap>
+                            <Typography variant="h6" noWrap className={classes.title}>
                                 clustarr-frontend
                             </Typography>
+                            <IconButton
+                                aria-label="open more menu"
+                                aria-haspopup="true"
+                                onClick={this.handleMoreMenuClick}
+                                color="inherit"
+                            >
+                                <MoreVert/>
+                            </IconButton>
+                            <Menu
+                                id="more-menu-appbar"
+                                anchorEl={this.state.anchorEl}
+                                keepMounted
+                                open={Boolean(this.state.anchorEl)}
+                                onClose={this.handleMoreMenuClose}
+                            >
+                                <MenuItem onClick={this.setupProxmox}>Setup Proxmox</MenuItem>
+                                <Tooltip title="Bring the cluster up">
+                                    <MenuItem onClick={this.rkeUp}>RKE up</MenuItem>
+                                </Tooltip>
+                                <Tooltip title="Teardown the cluster and clean cluster nodes">
+                                    <MenuItem onClick={this.rkeRemove}>RKE remove</MenuItem>
+                                </Tooltip>
+                            </Menu>
                         </Toolbar>
                     </AppBar>
                     <Drawer
