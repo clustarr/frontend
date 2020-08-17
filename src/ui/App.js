@@ -94,7 +94,7 @@ class App extends Component {
         this.handleMoreMenuClose();
 
         await AnsibleApi.runPlaybook({
-            "playbook": "sync-cluster.yml"
+            "playbook": "rke-up.yml"
         });
     }
 
@@ -102,7 +102,7 @@ class App extends Component {
         this.handleMoreMenuClose();
 
         await AnsibleApi.runPlaybook({
-            "playbook": "sync-cluster.yml"
+            "playbook": "rke-remove.yml"
         });
     }
 
