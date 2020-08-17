@@ -88,11 +88,13 @@ class HostsComponent extends Component {
 
         return (
             <React.Fragment>
-                <ChooseHostnameDialog
-                    isOpen={this.state.dialogOpen}
-                    handleClose={this.handleDialogClose}
-                    handleOk={this.handleDialogOk}
-                />
+                {
+                    this.state.dialogOpen &&
+                    <ChooseHostnameDialog
+                        handleClose={this.handleDialogClose}
+                        handleOk={this.handleDialogOk}
+                    />
+                }
 
                 <div>
                     {

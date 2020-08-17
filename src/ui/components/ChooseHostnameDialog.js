@@ -28,7 +28,7 @@ class ChooseHostnameDialog extends Component {
     render() {
         return (
             <Dialog
-                open={this.props.isOpen}
+                open={true}
                 onClose={this.props.handleClose}
                 fullWidth={true} >
                 <DialogTitle id="alert-dialog-title">Choose Hostname</DialogTitle>
