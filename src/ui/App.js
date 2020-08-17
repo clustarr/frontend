@@ -20,6 +20,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import AnsibleApi from "../api/AnsibleApi";
 import Tooltip from "@material-ui/core/Tooltip";
+import TitleComponent from "./components/TitleComponent";
 
 
 const drawerWidth = 240;
@@ -130,6 +131,8 @@ class App extends Component {
 
         return (
             <React.Fragment>
+                <TitleComponent title="clustarr-frontend" count={this.countRunningTasks()} />
+
                 <div className={classes.root}>
                     <CssBaseline />
                     <AppBar position="fixed" className={classes.appBar}>
