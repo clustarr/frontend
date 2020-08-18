@@ -55,8 +55,8 @@ class PlaybookOutputDialog extends Component {
                 <DialogTitle id="scroll-dialog-title">Playbook output</DialogTitle>
                 <DialogContent dividers>
                     <DialogContentText>
-                        <Typography>Command: {this.props.task.name}</Typography>
-                        <Typography>State: {this.props.task.state}</Typography>
+                        <Typography component="span">Command: {this.props.task.name}</Typography>
+                        <Typography component="span">State: {this.props.task.state}</Typography>
                         {this.state.taskOutput && <br/>}
                     </DialogContentText>
                     <Typography component="span" variant="body1" style={{whiteSpace: 'pre-line'}}>
