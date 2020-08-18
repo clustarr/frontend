@@ -8,6 +8,10 @@ const initialState = {
     loaded: false
 };
 
+const sortHosts = (hosts) => {
+    return hosts.sort((a, b) => b.group === a.group ? 0 : 1);
+}
+
 export const hostsReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_HOSTS:
@@ -38,7 +42,7 @@ export const hostsReducer = (state = initialState, action) => {
             }
             return {
                 ...state,
-                hosts: hosts,
+                hosts: sortHosts(hosts),
                 error: ""
             }
         case HOSTS_ERROR:
