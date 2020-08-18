@@ -1,29 +1,20 @@
 import React, {Component} from "react";
-import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import Button from "@material-ui/core/Button";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Radio from "@material-ui/core/Radio";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import HostType from "../../data-classes/HostType";
-import Switch from "@material-ui/core/Switch";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContentText from "@material-ui/core/DialogContentText";
 import FormLabel from "@material-ui/core/FormLabel";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
-class AddHostToClusterDialog extends Component {
+class DeleteHostConfirmationDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            hostType: HostType.MASTER,
             rkeUp: true
-        };
-    }
-
-    handleHostTypeChange = (event) => {
-        this.setState({
-            hostType: event.target.value
-        })
+        }
     }
 
     handleRkeUpChange = (event) => {
@@ -33,37 +24,18 @@ class AddHostToClusterDialog extends Component {
     }
 
     render() {
-        let hostTypes = [HostType.MASTER, HostType.WORKER];
-
         return (
             <Dialog
                 open={true}
                 onClose={this.props.handleClose}
-                fullWidth={true} >
+            >
                 <DialogTitle>
-                    Add host to cluster
+                    Delete host
                 </DialogTitle>
-                <DialogContent dividers>
-                    <FormLabel component="legend">
-                        Host type
-                    </FormLabel>
-                    <RadioGroup
-                        row
-                        name="host-type"
-                        value={this.state.hostType}
-                        onChange={this.handleHostTypeChange}
-                    >
-                        {hostTypes.map((hostType) => (
-                            <FormControlLabel
-                                value={hostType}
-                                key={hostType}
-                                control={
-                                    <Radio />
-                                }
-                                label={hostType}
-                            />
-                        ))}
-                    </RadioGroup>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to delete the host {this.props.host.hostname}?
+                    </DialogContentText>
                     <br/>
                     <FormLabel component="legend">
                         RKE up
@@ -84,7 +56,7 @@ class AddHostToClusterDialog extends Component {
                     <Button onClick={this.props.handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={() => this.props.handleOk(this.state.hostType, this.state.rkeUp)} color="primary">
+                    <Button onClick={() => this.props.handleOk(this.state.rkeUp)} color="primary">
                         Ok
                     </Button>
                 </DialogActions>
@@ -93,4 +65,4 @@ class AddHostToClusterDialog extends Component {
     }
 }
 
-export default AddHostToClusterDialog;
+export default DeleteHostConfirmationDialog;

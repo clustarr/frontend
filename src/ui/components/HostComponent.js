@@ -10,38 +10,31 @@ import {faRobot, faServer} from '@fortawesome/free-solid-svg-icons'
 import AnsibleApi from "../../api/AnsibleApi";
 import AddHostToClusterDialog from "./AddHostToClusterDialog";
 import HostGroups from "../../data-classes/HostGroups";
+import DeleteHostConfirmationDialog from "./DeleteHostConfirmationDialog";
 
 class HostComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dialogOpen: false
+            clusterDialogOpen: false,
+            deleteDialogOpen: false
         };
     }
 
-    deleteHost = async () => {
-        await AnsibleApi.runPlaybook({
-            "playbook": "remove-node.yml",
-            "extra_vars": {
-                "hostname": this.props.host.hostname
-            }
-        });
-    }
-
-    openDialog = () => {
+    openClusterDialog = () => {
         this.setState({
-            dialogOpen: true
+            clusterDialogOpen: true
         })
     }
 
-    handleDialogClose = () => {
+    handleClusterDialogClose = () => {
         this.setState({
-            dialogOpen: false
+            clusterDialogOpen: false
         })
     }
 
-    handleDialogOk = async (hostType, rkeUp) => {
-        this.handleDialogClose();
+    handleClusterDialogOk = async (hostType, rkeUp) => {
+        this.handleClusterDialogClose();
 
         let group = `${hostType}s`;
         await AnsibleApi.runPlaybook({
@@ -54,13 +47,49 @@ class HostComponent extends Component {
         });
     }
 
+    openDeleteDialog = async () => {
+        this.setState({
+            deleteDialogOpen: true
+        })
+    }
+
+    handleDeleteDialogClose = () => {
+        this.setState({
+            deleteDialogOpen: false
+        })
+    }
+
+    handleDeleteDialogOk = async (rkeUp) => {
+        this.handleDeleteDialogClose();
+
+        await AnsibleApi.runPlaybook({
+            "playbook": "remove-node.yml",
+            "extra_vars": {
+                "hostname": this.props.host.hostname,
+                "rkeUp": rkeUp
+            }
+        });
+    }
+
     render() {
         return (
             <React.Fragment>
-                <AddHostToClusterDialog
-                    isOpen={this.state.dialogOpen}
-                    handleClose={this.handleDialogClose}
-                    handleOk={this.handleDialogOk} />
+                {
+                    this.state.clusterDialogOpen &&
+                    <AddHostToClusterDialog
+                        handleClose={this.handleClusterDialogClose}
+                        handleOk={this.handleClusterDialogOk}
+                    />
+                }
+
+                {
+                    this.state.deleteDialogOpen &&
+                    <DeleteHostConfirmationDialog
+                        handleClose={this.handleDeleteDialogClose}
+                        handleOk={this.handleDeleteDialogOk}
+                        host={this.props.host}
+                    />
+                }
 
                 <ListItem
                     key={`listitem-${this.props.host.hostname}`}
@@ -110,7 +139,7 @@ class HostComponent extends Component {
                                         this.props.host.group === HostGroups.WORKERS ||
                                         !this.props.host.group
                                     }
-                                    onClick={this.openDialog} >
+                                    onClick={this.openClusterDialog} >
                                     {(
                                         this.props.host.group === HostGroups.MASTERS ||
                                         this.props.host.group === HostGroups.WORKERS
@@ -129,7 +158,7 @@ class HostComponent extends Component {
                                 <IconButton
                                     aria-label="delete host"
                                     color="inherit"
-                                    onClick={this.deleteHost}
+                                    onClick={this.openDeleteDialog}
                                     disabled={!this.props.host.group}
                                 >
                                     <Delete/>
