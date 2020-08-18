@@ -21,6 +21,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import AnsibleApi from "../api/AnsibleApi";
 import Tooltip from "@material-ui/core/Tooltip";
 import TitleComponent from "./components/TitleComponent";
+import RkeRemoveConfirmationDialog from "./components/RkeRemoveConfirmationDialog";
 
 
 const drawerWidth = 240;
@@ -57,7 +58,8 @@ class App extends Component {
         super(props);
         this.state = {
             displayComponent: <HostsComponent/>,
-            anchorEl: null
+            anchorEl: null,
+            dialogOpen: false
         };
     }
 
@@ -101,9 +103,9 @@ class App extends Component {
     rkeRemove = async () => {
         this.handleMoreMenuClose();
 
-        await AnsibleApi.runPlaybook({
-            "playbook": "rke-remove.yml"
-        });
+        this.setState({
+            dialogOpen: true
+        })
     }
 
     handleMoreMenuClick = (event) => {
@@ -117,6 +119,20 @@ class App extends Component {
             anchorEl: null
         });
     };
+
+    handleDialogClose = () => {
+        this.setState({
+            dialogOpen: false
+        })
+    }
+
+    handleDialogOk = async () => {
+        this.handleDialogClose();
+
+        await AnsibleApi.runPlaybook({
+            "playbook": "rke-remove.yml"
+        });
+    }
 
     countRunningTasks = () => {
         return this.props.tasks.filter(task => !(
@@ -132,6 +148,14 @@ class App extends Component {
         return (
             <React.Fragment>
                 <TitleComponent title="clustarr-frontend" count={this.countRunningTasks()} />
+
+                {
+                    this.state.dialogOpen &&
+                    <RkeRemoveConfirmationDialog
+                        handleClose={this.handleDialogClose}
+                        handleOk={this.handleDialogOk}
+                    />
+                }
 
                 <div className={classes.root}>
                     <CssBaseline />
