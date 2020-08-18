@@ -52,16 +52,16 @@ class PlaybookOutputDialog extends Component {
                 fullWidth={true}
                 maxWidth="md"
             >
-                <DialogTitle id="scroll-dialog-title">Playbook Output</DialogTitle>
+                <DialogTitle id="scroll-dialog-title">Playbook output</DialogTitle>
                 <DialogContent dividers>
-                    <DialogContentText
-                        id="scroll-dialog-description"
-                        tabIndex={-1}
-                    >
-                        <Typography component="span" variant="body1" style={{whiteSpace: 'pre-line'}}>
-                            {this.state.taskOutput}
-                        </Typography>
+                    <DialogContentText>
+                        {this.props.task.name}
+                        <br/>
+                        <br/>
                     </DialogContentText>
+                    <Typography component="span" variant="body1" style={{whiteSpace: 'pre-line'}}>
+                        {this.state.taskOutput}
+                    </Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.props.handleClose} color="primary">
