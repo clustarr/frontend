@@ -8,7 +8,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faRobot, faServer} from '@fortawesome/free-solid-svg-icons'
 import AnsibleApi from "../../api/AnsibleApi";
-import HostTypeDialog from "./HostTypeDialog";
+import AddHostToClusterDialog from "./AddHostToClusterDialog";
 import HostGroups from "../../data-classes/HostGroups";
 
 class HostComponent extends Component {
@@ -40,7 +40,7 @@ class HostComponent extends Component {
         })
     }
 
-    handleDialogOk = async (hostType) => {
+    handleDialogOk = async (hostType, rkeUp) => {
         this.handleDialogClose();
 
         let group = `${hostType}s`;
@@ -48,7 +48,8 @@ class HostComponent extends Component {
             "playbook": "add-node-to-cluster.yml",
             "extra_vars": {
                 "hostname": this.props.host.hostname,
-                "group": group
+                "group": group,
+                "rkeUp": rkeUp
             }
         });
     }
@@ -56,7 +57,7 @@ class HostComponent extends Component {
     render() {
         return (
             <React.Fragment>
-                <HostTypeDialog
+                <AddHostToClusterDialog
                     isOpen={this.state.dialogOpen}
                     handleClose={this.handleDialogClose}
                     handleOk={this.handleDialogOk} />

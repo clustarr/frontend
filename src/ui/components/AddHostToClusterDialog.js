@@ -8,18 +8,27 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Radio from "@material-ui/core/Radio";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import HostType from "../../data-classes/HostType";
+import Switch from "@material-ui/core/Switch";
+import FormLabel from "@material-ui/core/FormLabel";
 
-class HostTypeDialog extends Component {
+class AddHostToClusterDialog extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            hostType: HostType.MASTER
+            hostType: HostType.MASTER,
+            rkeUp: true
         };
     }
 
     handleHostTypeChange = (event) => {
         this.setState({
             hostType: event.target.value
+        })
+    }
+
+    handleRkeUpChange = (event) => {
+        this.setState({
+            rkeUp: event.target.checked
         })
     }
 
@@ -31,23 +40,51 @@ class HostTypeDialog extends Component {
                 open={this.props.isOpen}
                 onClose={this.props.handleClose}
                 fullWidth={true} >
-                <DialogTitle id="alert-dialog-title">Choose cluster host type</DialogTitle>
+                <DialogTitle>
+                    Add host to cluster
+                </DialogTitle>
                 <DialogContent dividers>
+                    <FormLabel component="legend">
+                        Host type
+                    </FormLabel>
                     <RadioGroup
+                        row
                         name="host-type"
                         value={this.state.hostType}
                         onChange={this.handleHostTypeChange}
                     >
                         {hostTypes.map((hostType) => (
-                            <FormControlLabel value={hostType} key={hostType} control={<Radio />} label={hostType} />
+                            <FormControlLabel
+                                value={hostType}
+                                key={hostType}
+                                control={
+                                    <Radio />
+                                }
+                                label={hostType}
+                            />
                         ))}
                     </RadioGroup>
+                    <br/>
+                    <FormLabel component="legend">
+                        RKE up
+                    </FormLabel>
+                    <FormControlLabel
+                        control={
+                            <Switch
+                                checked={this.state.rkeUp}
+                                onChange={this.handleRkeUpChange}
+                                name="rkeUp"
+                                color="primary"
+                            />
+                        }
+                        label="automatically"
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.props.handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={() => this.props.handleOk(this.state.hostType)} color="primary">
+                    <Button onClick={() => this.props.handleOk(this.state.hostType, this.state.rkeUp)} color="primary">
                         Ok
                     </Button>
                 </DialogActions>
@@ -56,4 +93,4 @@ class HostTypeDialog extends Component {
     }
 }
 
-export default HostTypeDialog;
+export default AddHostToClusterDialog;
