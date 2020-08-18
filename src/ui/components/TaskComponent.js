@@ -3,12 +3,11 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItem from "@material-ui/core/ListItem";
 import PlaybookOutputDialog from "./PlaybookOutputDialog";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import {Cancel, Delete, Done, ErrorOutline} from "@material-ui/icons";
+import {Cancel, Done, ErrorOutline} from "@material-ui/icons";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import AnsibleApi from "../../api/AnsibleApi";
 import FlowerApi from "../../api/FlowerApi";
 
 class TaskComponent extends Component {
