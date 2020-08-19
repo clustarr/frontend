@@ -179,7 +179,9 @@ class App extends Component {
                                 open={Boolean(this.state.anchorEl)}
                                 onClose={this.handleMoreMenuClose}
                             >
-                                <MenuItem onClick={this.setupProxmox}>Setup Proxmox</MenuItem>
+                                <Tooltip title="Run the setup-proxmox.yml playbook">
+                                    <MenuItem onClick={this.setupProxmox}>Setup Proxmox</MenuItem>
+                                </Tooltip>
                                 <Tooltip title="Bring the cluster up">
                                     <MenuItem onClick={this.rkeUp}>RKE up</MenuItem>
                                 </Tooltip>
