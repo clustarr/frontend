@@ -30,7 +30,7 @@ class RkeRemoveConfirmationDialog extends Component {
                     </Button>
                 </DialogActions>
             </Dialog>
-        )
+        );
     }
 }
 

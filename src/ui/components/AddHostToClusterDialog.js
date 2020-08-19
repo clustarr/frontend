@@ -23,14 +23,14 @@ class AddHostToClusterDialog extends Component {
     handleHostTypeChange = (event) => {
         this.setState({
             hostType: event.target.value
-        })
-    }
+        });
+    };
 
     handleRkeUpChange = (event) => {
         this.setState({
             rkeUp: event.target.checked
-        })
-    }
+        });
+    };
 
     render() {
         let hostTypes = [HostType.MASTER, HostType.WORKER];
@@ -39,7 +39,8 @@ class AddHostToClusterDialog extends Component {
             <Dialog
                 open={true}
                 onClose={this.props.handleClose}
-                fullWidth={true} >
+                fullWidth={true}
+            >
                 <DialogTitle>
                     Add host to cluster
                 </DialogTitle>
@@ -58,7 +59,7 @@ class AddHostToClusterDialog extends Component {
                                 value={hostType}
                                 key={hostType}
                                 control={
-                                    <Radio />
+                                    <Radio/>
                                 }
                                 label={hostType}
                             />
@@ -81,15 +82,21 @@ class AddHostToClusterDialog extends Component {
                     />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.props.handleClose} color="primary">
+                    <Button
+                        color="primary"
+                        onClick={this.props.handleClose}
+                    >
                         Cancel
                     </Button>
-                    <Button onClick={() => this.props.handleOk(this.state.hostType, this.state.rkeUp)} color="primary">
+                    <Button
+                        color="primary"
+                        onClick={() => this.props.handleOk(this.state.hostType, this.state.rkeUp)}
+                    >
                         Ok
                     </Button>
                 </DialogActions>
             </Dialog>
-        )
+        );
     }
 }
 

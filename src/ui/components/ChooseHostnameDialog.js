@@ -17,21 +17,24 @@ class ChooseHostnameDialog extends Component {
     generateGuid = () => {
         // https://stackoverflow.com/a/13403498
         return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-    }
+    };
 
     handleHostTypeChange = (event) => {
         this.setState({
             hostname: event.target.value
-        })
-    }
+        });
+    };
 
     render() {
         return (
             <Dialog
                 open={true}
                 onClose={this.props.handleClose}
-                fullWidth={true} >
-                <DialogTitle id="alert-dialog-title">Choose Hostname</DialogTitle>
+                fullWidth={true}
+            >
+                <DialogTitle id="alert-dialog-title">
+                    Choose Hostname
+                </DialogTitle>
                 <DialogContent dividers>
                     <TextField
                         autoFocus
@@ -53,7 +56,7 @@ class ChooseHostnameDialog extends Component {
                     </Button>
                 </DialogActions>
             </Dialog>
-        )
+        );
     }
 }
 

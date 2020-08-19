@@ -12,30 +12,30 @@ class TasksComponent extends Component {
             <div>
                 {
                     this.props.loaded &&
-                        this.props.error ?
-                            <Alert variant="outlined" severity="error">
-                                Tasks could not be loaded
+                    this.props.error ?
+                        <Alert variant="outlined" severity="error">
+                            Tasks could not be loaded
+                        </Alert>
+                        :
+                        this.props.tasks.length === 0 ?
+                            <Alert variant="outlined" severity="info">
+                                No Tasks available
                             </Alert>
                             :
-                            this.props.tasks.length === 0 ?
-                                <Alert variant="outlined" severity="info">
-                                    No Tasks available
-                                </Alert>
-                                :
-                                <Paper>
-                                    <List>
-                                        {
-                                            this.props.tasks.map((task) =>
-                                                <TaskComponent
-                                                    key={task.id}
-                                                    task={task} />
-                                            )
-                                        }
-                                    </List>
-                                </Paper>
+                            <Paper>
+                                <List>
+                                    {
+                                        this.props.tasks.map((task) =>
+                                            <TaskComponent
+                                                key={task.id}
+                                                task={task}/>
+                                        )
+                                    }
+                                </List>
+                            </Paper>
                 }
             </div>
-        )
+        );
     }
 }
 

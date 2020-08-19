@@ -6,7 +6,7 @@ import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItem from "@material-ui/core/ListItem";
 import Tooltip from "@material-ui/core/Tooltip";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faRobot, faServer} from '@fortawesome/free-solid-svg-icons'
+import {faRobot, faServer} from '@fortawesome/free-solid-svg-icons';
 import AnsibleApi from "../../api/AnsibleApi";
 import AddHostToClusterDialog from "./AddHostToClusterDialog";
 import HostGroups from "../../data-classes/HostGroups";
@@ -24,14 +24,14 @@ class HostComponent extends Component {
     openClusterDialog = () => {
         this.setState({
             clusterDialogOpen: true
-        })
-    }
+        });
+    };
 
     handleClusterDialogClose = () => {
         this.setState({
             clusterDialogOpen: false
-        })
-    }
+        });
+    };
 
     handleClusterDialogOk = async (hostType, rkeUp) => {
         this.handleClusterDialogClose();
@@ -45,19 +45,19 @@ class HostComponent extends Component {
                 "rkeUp": rkeUp
             }
         });
-    }
+    };
 
     openDeleteDialog = async () => {
         this.setState({
             deleteDialogOpen: true
-        })
-    }
+        });
+    };
 
     handleDeleteDialogClose = () => {
         this.setState({
             deleteDialogOpen: false
-        })
-    }
+        });
+    };
 
     handleDeleteDialogOk = async (rkeUp) => {
         this.handleDeleteDialogClose();
@@ -69,9 +69,18 @@ class HostComponent extends Component {
                 "rkeUp": rkeUp
             }
         });
-    }
+    };
 
     render() {
+        let isMaster = this.props.host.group === HostGroups.MASTERS;
+        let isWorker = this.props.host.group === HostGroups.WORKERS;
+        let isClusterNode = isMaster || isWorker;
+
+        let faStyle = {
+            width: "24px",
+            color: "initial"
+        };
+
         return (
             <React.Fragment>
                 {
@@ -101,14 +110,14 @@ class HostComponent extends Component {
                     />
                     <ListItemSecondaryAction>
                         <Tooltip
-                            title={"host is powered " + (this.props.host.running ? "on": "off")}
+                            title={"host is powered " + (this.props.host.running ? "on" : "off")}
                         >
                             <span>
                                 <IconButton
                                     color="inherit"
                                     disabled={true}
                                 >
-                                    <PowerSettingsNew style={this.props.host.running ? {color: "initial"} : {}} />
+                                    <PowerSettingsNew style={this.props.host.running ? {color: "initial"} : {}}/>
                                 </IconButton>
                             </span>
                         </Tooltip>
@@ -117,37 +126,24 @@ class HostComponent extends Component {
                             title={
                                 !this.props.host.group ?
                                     "" :
-                                    this.props.host.group === HostGroups.MASTERS ?
+                                    isMaster ?
                                         "host is a master" :
-                                        this.props.host.group === HostGroups.WORKERS ?
+                                        isWorker ?
                                             "host is a worker" :
                                             "add host to cluster"
                             }>
                             <span>
                                 <IconButton
-                                    aria-label={
-                                        (
-                                            this.props.host.group === HostGroups.MASTERS ||
-                                            this.props.host.group === HostGroups.WORKERS
-                                        ) ?
-                                            "" :
-                                            "add host to cluster"
-                                    }
+                                    aria-label={isClusterNode ? "" : "add host to cluster"}
                                     color="inherit"
-                                    disabled={
-                                        this.props.host.group === HostGroups.MASTERS ||
-                                        this.props.host.group === HostGroups.WORKERS ||
-                                        !this.props.host.group
-                                    }
-                                    onClick={this.openClusterDialog} >
-                                    {(
-                                        this.props.host.group === HostGroups.MASTERS ||
-                                        this.props.host.group === HostGroups.WORKERS
-                                    ) ?
-                                        this.props.host.group === HostGroups.MASTERS ?
-                                            <FontAwesomeIcon icon={faServer} style={{width: "24px", color: "initial"}} /> :
-                                            <FontAwesomeIcon icon={faRobot} style={{width: "24px", color: "initial"}} />
-                                        : <Cloud/>
+                                    disabled={isClusterNode || !this.props.host.group}
+                                    onClick={this.openClusterDialog}>
+                                    {
+                                        isClusterNode ?
+                                            isMaster ?
+                                                <FontAwesomeIcon icon={faServer} style={faStyle}/> :
+                                                <FontAwesomeIcon icon={faRobot} style={faStyle}/>
+                                            : <Cloud/>
                                     }
                                 </IconButton>
                             </span>

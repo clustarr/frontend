@@ -75,14 +75,14 @@ class App extends Component {
     displayHosts = () => {
         this.setState({
             displayComponent: <HostsComponent/>
-        })
-    }
+        });
+    };
 
     displayTasks = () => {
         this.setState({
             displayComponent: <TasksComponent/>
-        })
-    }
+        });
+    };
 
     setupProxmox = async () => {
         this.handleMoreMenuClose();
@@ -90,7 +90,7 @@ class App extends Component {
         await AnsibleApi.runPlaybook({
             "playbook": "setup-proxmox.yml"
         });
-    }
+    };
 
     rkeUp = async () => {
         this.handleMoreMenuClose();
@@ -98,15 +98,15 @@ class App extends Component {
         await AnsibleApi.runPlaybook({
             "playbook": "rke-up.yml"
         });
-    }
+    };
 
     rkeRemove = async () => {
         this.handleMoreMenuClose();
 
         this.setState({
             dialogOpen: true
-        })
-    }
+        });
+    };
 
     handleMoreMenuClick = (event) => {
         this.setState({
@@ -123,8 +123,8 @@ class App extends Component {
     handleDialogClose = () => {
         this.setState({
             dialogOpen: false
-        })
-    }
+        });
+    };
 
     handleDialogOk = async () => {
         this.handleDialogClose();
@@ -132,7 +132,7 @@ class App extends Component {
         await AnsibleApi.runPlaybook({
             "playbook": "rke-remove.yml"
         });
-    }
+    };
 
     countRunningTasks = () => {
         return this.props.tasks.filter(task => !(
@@ -140,14 +140,14 @@ class App extends Component {
             task.state === "FAILURE" ||
             task.state === "REVOKED"
         )).length;
-    }
+    };
 
     render() {
         const {classes} = this.props;
 
         return (
             <React.Fragment>
-                <TitleComponent title="clustarr-frontend" count={this.countRunningTasks()} />
+                <TitleComponent title="clustarr-frontend" count={this.countRunningTasks()}/>
 
                 {
                     this.state.dialogOpen &&
@@ -158,7 +158,7 @@ class App extends Component {
                 }
 
                 <div className={classes.root}>
-                    <CssBaseline />
+                    <CssBaseline/>
                     <AppBar position="fixed" className={classes.appBar}>
                         <Toolbar>
                             <Typography variant="h6" noWrap className={classes.title}>
@@ -198,14 +198,14 @@ class App extends Component {
                             paper: classes.drawerPaper,
                         }}
                     >
-                        <Toolbar />
+                        <Toolbar/>
                         <div className={classes.drawerContainer}>
                             <List>
                                 <ListItem button key="hosts" onClick={this.displayHosts}>
                                     <ListItemIcon>
                                         <Home/>
                                     </ListItemIcon>
-                                    <ListItemText primary="Hosts" />
+                                    <ListItemText primary="Hosts"/>
                                 </ListItem>
                                 <ListItem button key="tasks" onClick={this.displayTasks}>
                                     <ListItemIcon>
@@ -216,13 +216,13 @@ class App extends Component {
                                             <Memory/>
                                         </Badge>
                                     </ListItemIcon>
-                                    <ListItemText primary="Tasks" />
+                                    <ListItemText primary="Tasks"/>
                                 </ListItem>
                             </List>
                         </div>
                     </Drawer>
                     <main className={classes.content}>
-                        <Toolbar />
+                        <Toolbar/>
                         {this.state.displayComponent}
                     </main>
                 </div>
@@ -240,5 +240,5 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-    withStyles(styles, { withTheme: true })(App)
+    withStyles(styles, {withTheme: true})(App)
 );

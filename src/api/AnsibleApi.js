@@ -1,5 +1,5 @@
 export default class AnsibleApi {
-    static baseUrl = `http://${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/api`
+    static baseUrl = `http://${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/api`;
 
     static runPlaybook(body) {
         const requestOptions = {

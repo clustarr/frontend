@@ -38,7 +38,7 @@ class HostsComponent extends Component {
 
     componentDidMount() {
         this.props.getHosts();
-        this.interval = setInterval(this.props.getHosts, 4000)
+        this.interval = setInterval(this.props.getHosts, 4000);
     }
 
     componentWillUnmount() {
@@ -48,14 +48,14 @@ class HostsComponent extends Component {
     openDialog = () => {
         this.setState({
             dialogOpen: true
-        })
-    }
+        });
+    };
 
     handleDialogClose = () => {
         this.setState({
             dialogOpen: false
-        })
-    }
+        });
+    };
 
     handleDialogOk = async (hostname) => {
         this.handleDialogClose();
@@ -66,7 +66,7 @@ class HostsComponent extends Component {
                 "hostname": hostname
             }
         });
-    }
+    };
 
     render() {
         const {classes} = this.props;
@@ -100,23 +100,24 @@ class HostsComponent extends Component {
                                                 this.props.hosts.map((host) =>
                                                     <HostComponent
                                                         key={host.hostname}
-                                                        host={host} />
+                                                        host={host}
+                                                    />
                                                 )
                                             }
                                         </List>
                                     </Paper>
                             :
-                            <CircularProgress className={classes.progress} />
+                            <CircularProgress className={classes.progress}/>
                     }
                 </div>
 
                 <Tooltip title="Add Host" aria-label="add host">
                     <Fab color="primary" className={classes.fab} onClick={this.openDialog}>
-                        <Add />
+                        <Add/>
                     </Fab>
                 </Tooltip>
             </React.Fragment>
-        )
+        );
     }
 }
 
@@ -131,7 +132,7 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-    withStyles(styles, { withTheme: true })(
+    withStyles(styles, {withTheme: true})(
         HostsComponent
     )
 );

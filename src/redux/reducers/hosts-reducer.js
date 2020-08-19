@@ -10,18 +10,18 @@ const initialState = {
 
 const sortHosts = (hosts) => {
     return hosts.sort((a, b) => b.group === a.group ? 0 : 1);
-}
+};
 
 export const hostsReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_HOSTS:
             let inventoryList = action.data;
 
-            let allHosts = Object.keys(inventoryList['_meta']['hostvars'])
+            let allHosts = Object.keys(inventoryList['_meta']['hostvars']);
 
             let runningHosts = [];
             if (inventoryList['running']) {
-                runningHosts = inventoryList['running']['hosts']
+                runningHosts = inventoryList['running']['hosts'];
             }
 
             let hosts = [];
@@ -30,9 +30,9 @@ export const hostsReducer = (state = initialState, action) => {
                 host.hostname = hostname;
                 host.running = runningHosts.includes(hostname);
                 for (let group of [HostGroups.MASTERS, HostGroups.WORKERS, HostGroups.INDEPENDENTS]) {
-                    let groupHosts = []
+                    let groupHosts = [];
                     if (inventoryList[group]) {
-                        groupHosts = inventoryList[group]['hosts']
+                        groupHosts = inventoryList[group]['hosts'];
                     }
                     if (groupHosts.includes(hostname)) {
                         host.group = group;
@@ -44,19 +44,19 @@ export const hostsReducer = (state = initialState, action) => {
                 ...state,
                 hosts: sortHosts(hosts),
                 error: ""
-            }
+            };
         case HOSTS_ERROR:
             return {
                 ...state,
                 error: action.data,
                 hosts: []
-            }
+            };
         case HOSTS_LOADED:
             return {
                 ...state,
                 loaded: true
-            }
+            };
         default:
             return state;
     }
-}
+};

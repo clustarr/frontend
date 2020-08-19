@@ -19,7 +19,7 @@ class PlaybookOutputDialog extends Component {
     async componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.isOpen === false && this.props.isOpen === true) {
             await this.getOutput();
-            this.interval = setInterval(this.getOutput, 1000)
+            this.interval = setInterval(this.getOutput, 1000);
         }
         if (prevProps.isOpen === true && this.props.isOpen === false) {
             clearInterval(this.interval);
@@ -33,15 +33,15 @@ class PlaybookOutputDialog extends Component {
     getOutput = async () => {
         AnsibleApi.getPlaybookOutput(this.props.task.id)
             .then(response => {
-                let taskOutput = response.output
+                let taskOutput = response.output;
                 this.setState({
                     taskOutput: taskOutput
-                })
+                });
             })
             .catch((error) => {
                 console.log(error);
             });
-    }
+    };
 
     render() {
         return (
@@ -75,7 +75,7 @@ class PlaybookOutputDialog extends Component {
                     </Button>
                 </DialogActions>
             </Dialog>
-        )
+        );
     }
 }
 

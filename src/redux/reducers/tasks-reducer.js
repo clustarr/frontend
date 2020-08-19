@@ -9,16 +9,16 @@ const initialState = {
 
 const parseTask = (rawTask) => {
     let task = new Task();
-    task.id = rawTask["uuid"]
-    task.state = rawTask["state"]
-    task.name = rawTask["kwargs"]
-    task.datetime = rawTask["received"]
+    task.id = rawTask["uuid"];
+    task.state = rawTask["state"];
+    task.name = rawTask["kwargs"];
+    task.datetime = rawTask["received"];
     return task;
-}
+};
 
 const sortTasks = (tasks) => {
     return tasks.sort((a, b) => parseFloat(b.datetime) - parseFloat(a.datetime));
-}
+};
 
 export const tasksReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -40,13 +40,13 @@ export const tasksReducer = (state = initialState, action) => {
                 ...state,
                 error: action.data,
                 tasks: []
-            }
+            };
         case TASKS_LOADED:
             return {
                 ...state,
                 loaded: true
-            }
+            };
         default:
             return state;
     }
-}
+};

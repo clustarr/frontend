@@ -21,20 +21,24 @@ class TaskComponent extends Component {
     openDialog = () => {
         this.setState({
             dialogOpen: true
-        })
-    }
+        });
+    };
 
     handleDialogClose = () => {
         this.setState({
             dialogOpen: false
-        })
-    }
+        });
+    };
 
     cancelTask = async () => {
         await FlowerApi.cancelTask(this.props.task.id);
-    }
+    };
 
     render() {
+        let taskSucceeded = this.props.task.state === "SUCCESS";
+        let taskFailed = this.props.task.state === "FAILURE" || this.props.task.state === "REVOKED";
+        let taskRunning = !(taskSucceeded || taskFailed);
+
         return (
             <React.Fragment>
                 <PlaybookOutputDialog
@@ -49,10 +53,10 @@ class TaskComponent extends Component {
                 >
                     <ListItemIcon>
                         {
-                            this.props.task.state === "SUCCESS" ?
-                                <Done /> :
-                                (this.props.task.state === "FAILURE" || this.props.task.state === "REVOKED") ?
-                                    <ErrorOutline /> :
+                            taskSucceeded ?
+                                <Done/> :
+                                taskFailed ?
+                                    <ErrorOutline/> :
                                     <CircularProgress size={24}/>
                         }
                     </ListItemIcon>
@@ -62,12 +66,9 @@ class TaskComponent extends Component {
                     />
                     <ListItemSecondaryAction>
                         {
-                            !(
-                                this.props.task.state === "SUCCESS" ||
-                                this.props.task.state === "FAILURE" ||
-                                this.props.task.state === "REVOKED"
-                            ) &&
-                            <Tooltip title="cancel task">
+                            taskRunning &&
+                            <Tooltip
+                                title="cancel task">
                                 <IconButton
                                     aria-label="cancel task"
                                     onClick={this.cancelTask}

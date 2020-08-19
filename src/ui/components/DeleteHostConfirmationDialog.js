@@ -15,14 +15,14 @@ class DeleteHostConfirmationDialog extends Component {
         super(props);
         this.state = {
             rkeUp: true
-        }
+        };
     }
 
     handleRkeUpChange = (event) => {
         this.setState({
             rkeUp: event.target.checked
-        })
-    }
+        });
+    };
 
     render() {
         return (
@@ -67,7 +67,7 @@ class DeleteHostConfirmationDialog extends Component {
                     </Button>
                 </DialogActions>
             </Dialog>
-        )
+        );
     }
 }
 
