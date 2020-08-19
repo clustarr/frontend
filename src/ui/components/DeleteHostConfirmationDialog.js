@@ -8,6 +8,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import FormLabel from "@material-ui/core/FormLabel";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import HostGroups from "../../data-classes/HostGroups";
 
 class DeleteHostConfirmationDialog extends Component {
     constructor(props) {
@@ -36,21 +37,26 @@ class DeleteHostConfirmationDialog extends Component {
                     <DialogContentText>
                         Are you sure you want to delete the host {this.props.host.hostname}?
                     </DialogContentText>
-                    <br/>
-                    <FormLabel component="legend">
-                        RKE up
-                    </FormLabel>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={this.state.rkeUp}
-                                onChange={this.handleRkeUpChange}
-                                name="rkeUp"
-                                color="primary"
+                    {
+                        (this.props.host.group === HostGroups.MASTERS || this.props.host.group === HostGroups.WORKERS) &&
+                        <div>
+                            <br/>
+                            <FormLabel component="legend">
+                                RKE up
+                            </FormLabel>
+                            <FormControlLabel
+                                control={
+                                    <Switch
+                                        checked={this.state.rkeUp}
+                                        onChange={this.handleRkeUpChange}
+                                        name="rkeUp"
+                                        color="primary"
+                                    />
+                                }
+                                label="automatically"
                             />
-                        }
-                        label="automatically"
-                    />
+                        </div>
+                    }
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={this.props.handleClose} color="primary">
