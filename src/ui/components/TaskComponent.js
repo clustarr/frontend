@@ -63,6 +63,7 @@ class TaskComponent extends Component {
                     <ListItemText
                         id={`label-${this.props.task.id}`}
                         primary={this.props.task.name}
+                        secondary={this.props.task.parsedDatetime()}
                     />
                     <ListItemSecondaryAction>
                         {

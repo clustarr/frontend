@@ -60,6 +60,10 @@ class PlaybookOutputDialog extends Component {
                         </Typography>
                         <br/>
                         <Typography component="span">
+                            Started: {this.props.task.parsedDatetime()}
+                        </Typography>
+                        <br/>
+                        <Typography component="span">
                             State: {this.props.task.state}
                         </Typography>
                         <br/>
